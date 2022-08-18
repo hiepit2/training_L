@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FacultyRequest;
+use App\Http\Requests\FacultyUpdateRequest;
 use App\Models\Faculty;
 use Illuminate\Http\Request;
 
@@ -19,7 +21,7 @@ class FacultyController extends Controller
     {
         return view('admin.faculties.create');
     }
-    public function store(Request $request)
+    public function store(FacultyRequest $request)
     {
         $faculty = new Faculty();
         $faculty->fill($request->all());
@@ -28,17 +30,18 @@ class FacultyController extends Controller
     }
     public function edit(Faculty $faculty)
     {
-        return view('admin.faculties.edit',[
-            'faculty'=>$faculty
+        return view('admin.faculties.edit', [
+            'faculty' => $faculty
         ]);
     }
-    public function update(Request $request,Faculty $faculty){
+    public function update(FacultyUpdateRequest $request, Faculty $faculty)
+    {
         $faculty->name = $request->name;
         $faculty->save();
         return redirect()->route('faculties.list');
-        
     }
-    public function delete($id){
+    public function delete($id)
+    {
         $faculty = Faculty::find($id);
         $faculty->delete();
         return redirect()->back();

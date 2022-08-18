@@ -174,7 +174,7 @@
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">
-                            
+
                         </a>
                     </div>
                 </div>
@@ -200,7 +200,18 @@
                             <a href="{{route('faculties.list')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Faculties
+                                    Khoa
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('students.list')}}" class="nav-link">
+                                Sinh viên
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -210,7 +221,7 @@
                             <a href="" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    
+
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -220,17 +231,7 @@
                             <a href="" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
 
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -241,7 +242,7 @@
                             <a href="" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    
+
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -278,6 +279,7 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <div class="container-fluid">
+                    
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1>@yield('title')</h1>

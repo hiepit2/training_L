@@ -19,9 +19,11 @@ return new class extends Migration
             $table->string('address');
             $table->date('birthday');
             $table->string('phone');
-            $table->unsignedInteger('sex');
+            $table->unsignedInteger('gender');
             $table->string('email')->unique();
             $table->string('avatar');
+            $table->unsignedBigInteger('faculty_id');
+            $table->foreign('faculty_id')->references('id')->on('faculties');
             $table->timestamps();
         });
     }

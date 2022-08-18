@@ -5,12 +5,12 @@
     <a href="{{route('faculties.create')}}">Thêm mới</a>
 </div>
 
-    <table>
+    <table class="table">
         <thead>
             <tr>
-                <th>Mã</th>
-                <th>Tên khóa</th>
-                <th>Hành động</th>
+                <th scope="col">Mã</th>
+                <th scope="col">Tên khóa</th>
+                <th scope="col">Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +26,7 @@
                     <form action="{{route('faculties.delete',$item->id)}}" method="post">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger">Xóa</button>
+                        <button class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
                     </form>
                
                     
