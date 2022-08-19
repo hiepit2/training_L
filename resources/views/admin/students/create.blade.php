@@ -2,7 +2,9 @@
 @section('title','Danh sách sinh viên')
 @section('content')
 {{Form::open(array('route'=>'students.store','method'=>'post','enctype'=>'multipart/form-data'))}}
-
+@if(session('errors'))
+<div class="alert alert-danger">{{$errors['store']->first('name')}}</div>
+@endif
 @csrf
 <div class="form-group">
     {{Form::label('name','Tên học sinh',array('class'=>'students'))}}

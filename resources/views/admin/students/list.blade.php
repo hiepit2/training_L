@@ -25,28 +25,28 @@
         </tr>
     </thead>
     <tbody>
-     
-                @foreach($students as $item)
-                <tr>
-                    <td>{{$item->id}}</td>
-                    <td>{{$item->name}}</td>
-                    <td style="width: 10%;"><img src="{{asset($item->avatar)}}" alt="" width="100%"></td>
-                    <td>{{$item->email}}</td>
-                    <td style="display: flex;">
 
-                        <a href="{{route('students.edit',$item->id)}}">
-                            <button class="btn btn-warning">Cập nhật</button>
-                        </a>
-                        <form action="{{route('students.delete',$item->id)}}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
-                        </form>
+        @foreach($students as $item)
+        <tr>
+            <td>{{$item->id}}</td>
+            <td>{{$item->name}}</td>
+            <td style="width: 10%;"><img src="{{asset($item->avatar)}}" alt="" width="100%"></td>
+            <td>{{$item->email}}</td>
+            <td style="display: flex;">
+
+                <a href="{{route('students.edit',$item->id)}}">
+                    <button class="btn btn-warning">Cập nhật</button>
+                </a>
+                <form action="{{route('students.delete',$item->id)}}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
+                </form>
 
 
-                    </td>
-                </tr>
-                @endforeach
+            </td>
+        </tr>
+        @endforeach
     </tbody>
 </table>
 @endsection

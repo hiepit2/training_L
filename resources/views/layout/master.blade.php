@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
-
+    
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -197,7 +197,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a href="{{route('faculties.list')}}" class="nav-link">
+                            <a href="{{route('faculties.index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Khoa
@@ -207,7 +207,7 @@
 
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('students.list')}}" class="nav-link">
+                            <a href="" class="nav-link">
                                 Sinh viên
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
@@ -279,7 +279,7 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <div class="container-fluid">
-                    
+
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1>@yield('title')</h1>
@@ -297,7 +297,7 @@
 
             <!-- Main content -->
             <section class="content">
-
+                @include('layout.blog.flash_message')
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
@@ -337,6 +337,8 @@
     <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{asset('dist/js/demo.js')}}"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@2.8.2/dist/alpine.min.js"></script>
 </body>
 
 </html>

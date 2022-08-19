@@ -24,14 +24,16 @@ class FacultyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:faculties',
+            'name' => 'required|unique:faculties|min:6|max:32',
         ];
     }
     public function messages()
     {
         return [
-            'name.required' => 'Không được để trống',
-            'name.unique' => 'Tên khoa đã tồn tại'
+            'name.required' => 'Can not be left blank',
+            'name.unique' => 'Faculty name already exists',
+            'name.min' => 'Faculty name at least 6 characters',
+            'name.max' => 'Maximum faculty name 32 characters'
         ];
     }
 }
