@@ -24,7 +24,7 @@
                     <button class="btn btn-warning">Update</button>
                 </a>
                 {{ Form::model($item, array('route' => array('faculties.destroy', $item->id), 'method' => 'delete')) }}
-                {{Form::submit('Delete', ['class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure you want to delete?')"]) }}
+                {{ Form::submit('Delete', ['class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure you want to delete?')"]) }}
                 {{ Form::close() }}
             </td>
         </tr>

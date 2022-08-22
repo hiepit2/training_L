@@ -15,7 +15,9 @@ abstract class BaseRepository implements RepositoryInterface
         $this->setModel();
     }
 
-    //lấy model tương ứng
+    /**
+     * lấy model tương ứng
+     */
     abstract public function getModel();
 
     /**
@@ -26,6 +28,14 @@ abstract class BaseRepository implements RepositoryInterface
         $this->model = app()->make(
             $this->getModel()
         );
+    }
+
+        /**
+     * Set model
+     */
+    public function newModel()
+    {
+        return new $this->model;
     }
 
     public function getAll()
@@ -66,5 +76,10 @@ abstract class BaseRepository implements RepositoryInterface
         }
 
         return false;
+    }
+
+    public function pluck($key, $value)
+    {
+        return $this->model->pluck($value, $key);
     }
 }

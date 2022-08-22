@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FacultyRequest;
-use App\Http\Requests\FacultyUpdateRequest;
 use App\Models\Faculty;
 use App\Repositories\Faculty\FacultyRepositoryInterface;
 use Illuminate\Contracts\Session\Session;
@@ -13,13 +12,7 @@ use Illuminate\Http\Request;
 class FacultyController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    /**
-     * @var PostRepositoryInterface|\App\Repositories\Repository
+     * @var FacultyRepositoryInterface|\App\Repositories\Repository
      */
     protected $facultyRepo;
 
@@ -27,9 +20,14 @@ class FacultyController extends Controller
     {
         $this->facultyRepo = $facultyRepo;
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        // $faculties = Faculty::select()->orderBy('updated_at', 'DESC')->get();
         $faculties = $this->facultyRepo->getAll();
         return view('admin.faculties.index', compact('faculties'));
     }

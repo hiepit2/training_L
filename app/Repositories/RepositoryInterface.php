@@ -10,6 +10,8 @@ interface RepositoryInterface
      */
     public function getAll();
 
+    public function newModel();
+
     /**
      * Get one
      * @param $id
@@ -38,4 +40,12 @@ interface RepositoryInterface
      * @return mixed
      */
     public function delete($id);
+
+    /**
+     * Update
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
+    public function pluck($key, $value);
 }

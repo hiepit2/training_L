@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\TextUI\XmlConfiguration\Group;
 
@@ -16,4 +17,8 @@ use PHPUnit\TextUI\XmlConfiguration\Group;
 |
 */
 
-Route::resource('faculties',FacultyController::class);
+Route::resources([
+    'faculties' => FacultyController::class,
+    'students' => StudentController::class,
+]);
+

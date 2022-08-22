@@ -2,62 +2,118 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Faculty;
+use App\Http\Requests\StudentRequest;
 use App\Models\Student;
+use App\Repositories\Faculty\FacultyRepositoryInterface;
+use App\Repositories\Student\StudentRepositoryInterface;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function list()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    /**
+     * @var StudentRepositoryInterface|\App\Repositories\Repository
+     */
+    protected $studentRepo, $facultyRepo;
+
+    public function __construct(StudentRepositoryInterface $studentRepo,FacultyRepositoryInterface $facultyRepo)
     {
-        $students = Student::all();
-        $faculty = Faculty::all();
-        return view('admin.students.list', [
-            'students' => $students,
-            'faculty' => $faculty
-        ]);
+        $this->studentRepo = $studentRepo;
+        $this->facultyRepo = $facultyRepo;
     }
+    public function index()
+    {
+        $students = $this->studentRepo->getAll();
+        return view('admin.students.index', compact('students'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-        $faculty = Faculty::all();
-        return view('admin.students.create',[
-            'faculty' => $faculty
-        ]);
-    }
-    public function store(Request $request)
-    {
-        $students = new Student();
-        $students->fill($request->all());
-      
-        if ($request->hasFile('avatar')) {
+        $student = $this->studentRepo->newModel();
+        $faculties = $this->facultyRepo->pluck('id', 'name');
 
+        return view('admin.students.create', compact('student','faculties'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StudentRequest $request)
+    {
+        if ($request->hasFile('avatar')) {
             $avatar = $request->avatar;
             $avatarName = $avatar->hashName();
             $avatarName = $request->name . '_' . $avatarName;
-            $students->avatar = $avatar->storeAs('images/students', $avatarName);
+            $request->avatar = $avatar->storeAs('images/students', $avatarName);
+            
         } else {
-            $students->avatar = 'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg';
+            $request->avatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSErd3GQcEwGOfzFCIS2BdXBdOHHPIFwTBdMg&usqp=CAU';
         }
-        $students->save();
-        return redirect()->route('students.list');
+        $data = $request->all();
+        $data['avatar'] = $request->avatar;
+        $student = $this->studentRepo->create($data);
+        return redirect()->route('students.index')->with('message','Successfully');
     }
 
-    public function search_old(Request $request){
-        if($request->first_old < $request->second_old){
-            $first = $request->first_old;
-            $second = $request->second_old;
-        }
-        else{
-            $first = $request->second_old;
-            $second = $request->first_old;
-        }
-        $search_old = Student::all();
-        $date = date('m-d-yy');
-        return redirect()->route('students.list',[
-            'first'=>$first,
-            'second'=>$second,
-            'search_old'=>$search_old,
-            'date'=>$date
-        ]);
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $student = $this->studentRepo->find($id);
+        return view('admin.students.edit', compact('student','id'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $data = $request->all();
+        $student = $this->studentRepo->update($id, $data);
+        return redirect()->route('students.index')->with('message','Successfully');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $this->studentRepo->delete($id);
+        return redirect()->route('students.index')->with('message','Successfully');
     }
 }
