@@ -16,6 +16,12 @@ class Student extends Model
         'gender',
         'email',
         'avatar',
-        'faculty_id'
+        'faculty_id',
+        'user_id'
     ];
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class);
+    }
 }

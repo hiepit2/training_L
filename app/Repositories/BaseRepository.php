@@ -40,7 +40,16 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function getAll()
     {
+        return $this->model->select()->orderby('updated_at','desc')->paginate(3);
+    }
+    // public function getJoin()
+    // {
+    //     return $this->model->join('student_subject','stud')->orderby('updated_at','desc')->paginate(3);
+    // }
+    public function getSome()
+    {
         return $this->model->select()->orderby('updated_at','desc')->get();
+        // ->paginate(3);
     }
 
     public function find($id)
@@ -81,5 +90,13 @@ abstract class BaseRepository implements RepositoryInterface
     public function pluck($key, $value)
     {
         return $this->model->pluck($value, $key);
+    }
+
+    public function login($email){
+        return $this->model->where('email', '=', $email)->get();
+    }
+
+    public function show_student($id){
+        return $this->model->where('user_id', '=', $id)->first();
     }
 }

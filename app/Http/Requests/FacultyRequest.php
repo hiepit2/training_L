@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule as ValidationRule;
 
 class FacultyRequest extends FormRequest
 {
@@ -21,16 +23,17 @@ class FacultyRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
+
     public function rules()
     {
         $data = [
-            'name' => 'required|min:6|max:32|unique:faculties',
+            'name' => 'required|unique:faculties',
         ];
 
         if ($this->route('faculty')) {
-            $data['name'] = 'required|min:6|max:32|unique:faculties,id,' . $this->route('faculty');  
+            // $data['name'] = 'required|unique:faculties,id,' . $this->route('faculty');
+            $data['name'] = ['required', ValidationRule::unique('faculties')->ignore($this->route('faculty'))];
         }
-
         return $data;
     }
 }

@@ -1,9 +1,9 @@
 <?php
-namespace App\Repositories\Student;
+namespace App\Repositories\Students;
 
 use App\Repositories\BaseRepository;
 
-use App\Repositories\Student\StudentRepositoryInterface;
+use App\Repositories\Students\StudentRepositoryInterface;
 
 class StudentRepository extends BaseRepository implements StudentRepositoryInterface
 {

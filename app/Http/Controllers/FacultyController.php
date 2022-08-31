@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FacultyRequest;
 use App\Models\Faculty;
-use App\Repositories\Faculty\FacultyRepositoryInterface;
+use App\Models\User;
+use App\Repositories\Faculties\FacultyRepositoryInterface;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Role_has_permissions;
 
 class FacultyController extends Controller
 {
@@ -28,6 +33,13 @@ class FacultyController extends Controller
      */
     public function index()
     {
+        // foreach(Auth::user()->roles as $item){
+        //     dd($item->name);
+        // }
+        $user = User::find(16);
+        // // $role = Role::findById(2);
+        $user->assignRole(2);
+        //    Permission::create(['name' => 'faculty_delete']);
         $faculties = $this->facultyRepo->getAll();
         return view('admin.faculties.index', compact('faculties'));
     }
@@ -39,8 +51,9 @@ class FacultyController extends Controller
      */
     public function create()
     {
-        $faculty = new Faculty();
-        return view('admin.faculties.create', compact('faculty'));
+
+        $faculty = $this->facultyRepo->newModel();
+        return view('admin.faculties.form', compact('faculty'));
     }
 
     /**
@@ -53,7 +66,7 @@ class FacultyController extends Controller
     {
         $data = $request->all();
         $faculty = $this->facultyRepo->create($data);
-        return redirect()->route('faculties.index')->with('message','Successfully');
+        return redirect()->route('faculties.index')->with('message', 'Successfully');
     }
 
     /**
@@ -76,7 +89,7 @@ class FacultyController extends Controller
     public function edit($id)
     {
         $faculty = $this->facultyRepo->find($id);
-        return view('admin.faculties.create', compact('faculty','id'));
+        return view('admin.faculties.form', compact('faculty', 'id'));
     }
 
     /**
@@ -90,7 +103,7 @@ class FacultyController extends Controller
     {
         $data = $request->all();
         $faculty = $this->facultyRepo->update($id, $data);
-        return redirect()->route('faculties.index')->with('message','Successfully');
+        return redirect()->route('faculties.index')->with('message', 'Successfully');
     }
 
     /**
@@ -102,6 +115,6 @@ class FacultyController extends Controller
     public function destroy($id)
     {
         $this->facultyRepo->delete($id);
-        return redirect()->route('faculties.index')->with('message','Successfully');
+        return redirect()->route('faculties.index')->with('message', 'Successfully');
     }
 }

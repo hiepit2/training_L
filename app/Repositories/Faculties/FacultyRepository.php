@@ -1,9 +1,9 @@
 <?php
-namespace App\Repositories\Faculty;
+namespace App\Repositories\Faculties;
 
 use App\Repositories\BaseRepository;
 
-use App\Repositories\Faculty\FacultyRepositoryInterface;
+use App\Repositories\Faculties\FacultyRepositoryInterface;
 
 class FacultyRepository extends BaseRepository implements FacultyRepositoryInterface
 {

@@ -9,6 +9,11 @@ interface RepositoryInterface
      * @return mixed
      */
     public function getAll();
+    /**
+     * Get all
+     * @return mixed
+     */
+    public function getSome();
 
     public function newModel();
 
@@ -48,4 +53,21 @@ interface RepositoryInterface
      * @return mixed
      */
     public function pluck($key, $value);
+
+    /**
+     * Update
+     * @param $email
+    
+     * @return mixed
+     */
+    public function login($email);
+
+    /**
+     * Update
+     * @param $id
+     * 
+     * @return mixed
+     */
+    public function show_student($id);
+
 }

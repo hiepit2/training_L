@@ -19,6 +19,8 @@
 <div class="form-group">
     {{ Form::label('faculty', 'Faculty')}}
     {{ Form::select('faculty_id', $faculties, $student->faculty_id, ['class' => 'form-control']) }}
+
+    <!-- {{ Form::select('faculty_id', ['class' => 'form-control'])}} -->
 </div>
 <div class="form-group">
     {{ Form::label('address', 'Address')}}
@@ -34,12 +36,13 @@
 </div>
 <div class="form-group">
     {{ Form::label('gender', 'Gender')}}
-    Nam: {{ Form::radio('gender', '0')}} 
-    Nữ: {{ Form::radio('gender', '1')}}
-    
+    Male: {{ Form::radio('gender', '0')}}
+    Female: {{ Form::radio('gender', '1')}}
+
 </div>
 <div>
-    <button class="btn btn-primary">Thêm</button>
+    {{ Form::submit('Add', ['class' => 'btn btn-primary'])}}
+    <a href="{{route('students.index')}}" class="btn btn-success">Back</a>
 </div>
 
 {{ Form::close() }}

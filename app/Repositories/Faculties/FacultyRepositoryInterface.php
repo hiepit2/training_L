@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories\Faculty;
+namespace App\Repositories\Faculties;
 
 use App\Repositories\RepositoryInterface;
 
