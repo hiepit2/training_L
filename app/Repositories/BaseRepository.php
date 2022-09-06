@@ -48,8 +48,7 @@ abstract class BaseRepository implements RepositoryInterface
     // }
     public function getSome()
     {
-        return $this->model->select()->orderby('updated_at','desc')->get();
-        // ->paginate(3);
+        return $this->model->select('id')->get();
     }
 
     public function find($id)
@@ -96,7 +95,5 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->where('email', '=', $email)->get();
     }
 
-    public function show_student($id){
-        return $this->model->where('user_id', '=', $id)->first();
-    }
+  
 }

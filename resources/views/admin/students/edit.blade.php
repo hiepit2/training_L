@@ -1,7 +1,7 @@
 @extends('layout.master')
 @section('title','Add new student')
 @section('content')
-{{ Form::model($student, ['route'=> ['students.update', $student], 'method'=>'put', 'enctype'=>'multipart/form-data'])}}
+{{ Form::model($student, ['route'=> ['students.update', $student], 'method' => 'put', 'enctype'=>'multipart/form-data'])}}
 <div class="form-group">
     {{ Form::label('email', 'Email') }}
     {{ Form::text('email', $student->email, array('class' => 'form-control', 'readonly') )}}

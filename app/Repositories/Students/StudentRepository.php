@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Students;
 
 use App\Repositories\BaseRepository;
@@ -16,22 +17,39 @@ class StudentRepository extends BaseRepository implements StudentRepositoryInter
 
     public function getStudent()
     {
-        return $this->model->select('name','address','birthday','phone','gender','email','avatar','faculty_id')->take(5)->get();
+        return $this->model->select()->take(5)->get();
     }
 
     public function search($data)
     {
-        $student = $this->model->newQuery();
+        $student = $this->model->newQuery()->orderby('updated_at', 'DESC');
 
-        if(isset($data['age_from'])) {
+        if (isset($data['age_from'])) {
             $student->whereYear('birthday', '<=', Carbon::now()->subYear($data['age_from'])->format('Y'));
         }
 
-        if(isset($data['age_to'])) {
+        if (isset($data['age_to'])) {
             $student->whereYear('birthday', '>=', Carbon::now()->subYear($data['age_to'])->format('Y'));
         }
 
-//dd(        $student->first());
-        return $student->paginate(3);
+        if (isset($data['point_from']) && !isset($data['point_to'])) {
+            $student->join('student_subject', 'students.id', '=', 'student_subject.student_id')->where('point', '>=', $data['point_from']);
+        }
+
+        if (isset($data['point_to']) && !isset($data['point_from'])) {
+            $student->join('student_subject', 'students.id', '=', 'student_subject.student_id')->where('point', '<=', $data['point_to']);
+        }
+
+        if (isset($data['point_to']) && isset($data['point_from'])) {
+            $student->join('student_subject', 'students.id', '=', 'student_subject.student_id')->where('point', '>=', $data['point_from']);
+            $student->where('point', '<=', $data['point_to']);
+        }
+
+        return $student->paginate(3)->withQueryString();
     }
+
+    public function show_student($id){
+        return $this->model->where('user_id', '=', $id)->first();
+    }
+
 }

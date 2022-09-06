@@ -33,13 +33,6 @@ class FacultyController extends Controller
      */
     public function index()
     {
-        // foreach(Auth::user()->roles as $item){
-        //     dd($item->name);
-        // }
-        $user = User::find(16);
-        // // $role = Role::findById(2);
-        $user->assignRole(2);
-        //    Permission::create(['name' => 'faculty_delete']);
         $faculties = $this->facultyRepo->getAll();
         return view('admin.faculties.index', compact('faculties'));
     }
@@ -51,7 +44,6 @@ class FacultyController extends Controller
      */
     public function create()
     {
-
         $faculty = $this->facultyRepo->newModel();
         return view('admin.faculties.form', compact('faculty'));
     }

@@ -62,12 +62,6 @@ interface RepositoryInterface
      */
     public function login($email);
 
-    /**
-     * Update
-     * @param $id
-     * 
-     * @return mixed
-     */
-    public function show_student($id);
+   
 
 }

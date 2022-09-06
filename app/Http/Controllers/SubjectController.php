@@ -3,20 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SubjectRequest;
+use App\Models\Student;
+use App\Models\Student_subject;
 use App\Models\Subject;
+use App\Models\User;
+use App\Repositories\Students\StudentRepositoryInterface;
 use App\Repositories\Subjects\SubjectRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubjectController extends Controller
 {
-      /**
+    /**
      * @var SubjectRepositoryInterface|\App\Repositories\Repository
      */
-    protected $subjectRepo;
-    
-    public function __construct(SubjectRepositoryInterface $subjectRepo)
+    protected $subjectRepo, $studentRepo;
+
+    public function __construct(SubjectRepositoryInterface $subjectRepo, StudentRepositoryInterface $studentRepo)
     {
         $this->subjectRepo = $subjectRepo;
+        $this->studentRepo = $studentRepo;
     }
 
     /**
@@ -26,9 +32,19 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = $this->subjectRepo->getAll();
-        // $subjects = Subject::join('student_subject', 'subject.id', '=');
-        return view('admin.subjects.index', compact('subjects'));
+        // dd(Auth::user()->roles[0]->name);
+        $subjects = $this->subjectRepo->withStudent()->paginate(3);
+        if (Auth::user()->roles[0]->name == 'teacher') {
+            return view('admin.subjects.index', compact('subjects'));
+        }
+        $student = Student::where('user_id', Auth::id())->first();
+        $subject_point = $student->subjects;
+       
+        if(!isset($subject_point[0])){
+            $subject_po = 1;
+            return view('admin.subjects.index', compact('subjects', 'subject_po', 'student'));
+        }
+        return view('admin.subjects.index', compact('subjects', 'subject_point', 'student'));
     }
 
     /**
@@ -63,7 +79,6 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -75,7 +90,7 @@ class SubjectController extends Controller
     public function edit($id)
     {
         $subject = $this->subjectRepo->find($id);
-        return view('admin.subjects.form', compact('subject' ,'id'));
+        return view('admin.subjects.form', compact('subject', 'id'));
     }
 
     /**
@@ -100,7 +115,17 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
-        $this->subjectRepo->delete($id);
-        return redirect()->route('subjects.index')->with('message', 'Successfully');
+        $subjects = $this->subjectRepo->withStudent()->find($id);
+
+        if (isset($subjects->students[0])) {
+            return redirect()->route('subjects.index')->with('error', 'Unsuccessfully');
+        } else {
+            $this->subjectRepo->delete($id);
+            return redirect()->route('subjects.index')->with('message', 'Successfully');
+        }
+    }
+
+    public function sub_subject(Request $request, $id){
+        dd($request);
     }
 }

@@ -37,6 +37,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $students = $this->studentRepo->search($request->all());
+        // dd($students);
         return view('admin.students.index', compact('students'));
     }
 
@@ -93,14 +94,23 @@ class StudentController extends Controller
         } else {
             $request->avatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSErd3GQcEwGOfzFCIS2BdXBdOHHPIFwTBdMg&usqp=CAU';
         }
+
         $request['user_id'] = $user_id;
+        $code = $user_id;
+        for ($i = 0; strlen($code) < 6; $i++) {
+            $code = '0' .$code;
+            $i++;
+        }
+
+        $request['code'] = $code;
         $data = $request->all();
         $data['avatar'] = $request->avatar;
+
         $student = $this->studentRepo->create($data);
         $user = $this->userRepo->find($user_id);
+        $user->assignRole(2);
         $mailable = new RegistMail($user);
         Mail::to($request->email)->send($mailable);
-        $user->assignRole(2);
         return redirect()->route('students.index')->with('message', 'Successfully');
     }
 
@@ -147,6 +157,7 @@ class StudentController extends Controller
         if ($request['phone'] == '') {
             $request['phone'] = '';
         }
+      
         $data = $request->all();
         if ($request->hasFile('avatar')) {
             $avatar = $request->avatar;
@@ -167,80 +178,14 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $this->studentRepo->delete($id);
+        $student = $this->studentRepo->find($id);
+        $user = $this->userRepo->find($student->user_id)->delete();
+        $this->studentRepo->delete($student->id);
         return redirect()->route('students.index')->with('message', 'Successfully');
     }
 
-    public function search_old(Request $request)
+    public function update_profile(Request $request, $id)
     {
-        $date = date('Y');
-        $formOld = $request['fromOld'];
-        $toOld = $request['toOld'];
-        if ($formOld > $toOld) {
-            $formOld = $request['toOld'];
-            $toOld = $request['fromOld'];
-        }
-        // dd($request);
-        $stu = Student::all();
-        if ($formOld == '' && $toOld == '') {
-            return redirect()->route('students.index');
-        } elseif ($formOld == '' | $toOld == '') {
-            foreach ($stu as $item) {
-                $bits = explode('-', $item->birthday);
-                $age = $date - $bits[0];
-                if ($age == $toOld) {
-                    $_SESSION['students'] = $item;
-                    $students[] = $_SESSION['students'];
-                }
-                else{
-                    $students = [];
-                }
-            }
-            return view('admin.students.index', compact('students'));
-        } else {
-            foreach ($stu as $item) {
-                $bits = explode('-', $item->birthday);
-                $age = $date - $bits[0];
-                
-                if ($formOld <= $age && $age <= $toOld) {
-                    $_SESSION['students'] = $item;
-                    $students[] = $_SESSION['students'];
-                }
-                else{
-                    $students = [];
-                }
-            }
-            return view('admin.students.index', compact('students'));
-        }
-    }
-    
-    public function search_point(Request $request){
-        $fromPoint = $request['fromPoint'];
-        $toPoint = $request['toPoint'];
-        if ($fromPoint > $toPoint) {
-            $fromPoint = $request['toPoint'];
-            $toPoint = $request['fromPoint'];
-        }
-        $stu = Student::join('student_subject', 'students.id', '=', 'student_subject.student_id')->get();
-        if ($fromPoint == '' && $toPoint == '') {
-            return redirect()->route('students.index');
-        } elseif ($fromPoint == '' | $toPoint == '') {
-            foreach ($stu as $item) {
-                if ($item->point == $toPoint) {
-                    $_SESSION['students'] = $item;
-                    $students[] = $_SESSION['students'];
-                }
-            }
-            return view('admin.students.index', compact('students'));
-        } else {
-            foreach ($stu as $item) {
-                if ($fromPoint <= $item->point && $item->point <= $toPoint) {
-                    $_SESSION['students'] = $item;
-                    $students[] = $_SESSION['students'];
-                }
-            }
-            return view('admin.students.index', compact('students'));
-        }
-        dd($stu);
+        dd($request);
     }
 }

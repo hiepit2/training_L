@@ -17,4 +17,8 @@ class SubjectRepository extends BaseRepository implements SubjectRepositoryInter
     {
         return $this->model->select('name')->take(5)->get();
     }
+
+    public function withStudent(){
+        return $this->model->with('students');
+    }
 }

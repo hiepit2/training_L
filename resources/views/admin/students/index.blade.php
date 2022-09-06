@@ -10,35 +10,29 @@
         <br>
         <div class="container">
             <div class="row">
-                <div class="container-fluid">
+                <div class="container-fluid1">
                     <div class="col-sm-3">
-                        <label for="">from Old</label>
+                        <label for="">Age from</label>
                         <input type="text" class="form-control input-sm" id="fromOld" name="age_from" require>
                     </div>
                     <div class="col-sm-3">
-                        <label for="">to Old</label>
+                        <label for="">Age to</label>
                         <input type="text" class="form-control input-sm" id="toOld" name="age_to" require>
-                    </div>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn" name="search">Search</button>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
-    <form action="{{route('search_point')}}" method="post">
-        @csrf
         <br>
         <div class="container">
             <div class="row">
-                <div class="container-fluid">
+                <div class="container-fluid1">
                     <div class="col-sm-3">
-                        <label for="">from Point</label>
-                        <input type="text" class="form-control input-sm" id="fromPoint" name="fromPoint" require>
+                        <label for="">Point from</label>
+                        <input type="text" class="form-control input-sm" id="fromPoint" name="point_from" require>
                     </div>
                     <div class="col-sm-3">
-                        <label for="">to Point</label>
-                        <input type="text" class="form-control input-sm" id="toPoint" name="toPoint" require>
+                        <label for="">Point to</label>
+                        <input type="text" class="form-control input-sm" id="toPoint" name="point_to" require>
                     </div>
                     <div class="col-sm-2">
                         <button type="submit" class="btn" name="search">Search</button>
@@ -59,7 +53,7 @@
         </tr>
     </thead>
     <tbody>
-        @if($students != '')
+      
         @foreach($students as $item)
         <tr>
             <td>{{$item->id}}</td>
@@ -81,18 +75,14 @@
             </td>
         </tr>
         @endforeach
-        @endif
+       
     </tbody>
 </table>
 {{ $students->links() }}
 
 @endsection
 <style>
-    /* .container-fluid {
-        display: grid;
-        grid-template-columns: 2fr 2fr 1fr;
+    .container-fluid1 {
+        display: flex;
     }
-    .containerfluid input{
-        width: 300%;
-    } */
 </style>
