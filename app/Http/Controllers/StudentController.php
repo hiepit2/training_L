@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StudentRequest;
 use App\Mail\RegistMail;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\User;
 use App\Repositories\Faculties\FacultyRepositoryInterface;
 use App\Repositories\Students\StudentRepositoryInterface;
+use App\Repositories\Subjects\SubjectRepositoryInterface;
 use App\Repositories\Users\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,13 +23,16 @@ class StudentController extends Controller
     /**
      * @var StudentRepositoryInterface|\App\Repositories\Repository
      */
-    protected $studentRepo, $facultyRepo, $userRepo;
+    protected $studentRepo, $facultyRepo, $userRepo, $subjectRepo;
 
-    public function __construct(StudentRepositoryInterface $studentRepo, FacultyRepositoryInterface $facultyRepo, UserRepositoryInterface $userRepo)
+    public function __construct(StudentRepositoryInterface $studentRepo,
+        FacultyRepositoryInterface $facultyRepo, UserRepositoryInterface $userRepo,
+        SubjectRepositoryInterface $subjectRepo)
     {
         $this->studentRepo = $studentRepo;
         $this->facultyRepo = $facultyRepo;
         $this->userRepo = $userRepo;
+        $this->subjectRepo = $subjectRepo;
     }
     /**
      * Display a listing of the resource.
@@ -36,8 +41,18 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $students = $this->studentRepo->search($request->all());
+        // $subjects = $this->subjectRepo->withStudent()->get();
+        $students = Student::with('subjects')->paginate(3);
+        // $students = $this->studentRepo->search($request->all());
         // dd($students);
+        // foreach($students as $student){
+        //     $subject_point = $student->subjects;
+        //     echo '<pre>';
+        //     var_dump($student);
+        //     echo '</pre>';
+        // }
+        // $subjects = $this->subjectRepo->withStudent()->get();
+   
         return view('admin.students.index', compact('students'));
     }
 

@@ -38,7 +38,9 @@ class SubjectController extends Controller
             return view('admin.subjects.index', compact('subjects'));
         }
         $student = Student::where('user_id', Auth::id())->first();
+      
         $subject_point = $student->subjects;
+        
        
         if(!isset($subject_point[0])){
             $subject_po = 1;
@@ -126,6 +128,6 @@ class SubjectController extends Controller
     }
 
     public function sub_subject(Request $request, $id){
-        dd($request);
+        // dd($request);
     }
 }

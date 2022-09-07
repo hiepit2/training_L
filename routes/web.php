@@ -38,5 +38,8 @@ Route::group(['middleware' => ['permission:list|show']], function () {
     Route::resource('students', StudentController::class)->only('show');
     Route::resource('subjects', SubjectController::class)->only('index');
 });
-Route::post('/sub_subject/{$student}', [SubjectController::class, 'sub_subject'])->name('sub_subject');
+
+Route::prefix('subjects')->name('subjects.')->group(function () {
+    Route::post('/sub_subject/{$student}', [SubjectController::class, 'sub_subject'])->name('sub_subject');
+});
 

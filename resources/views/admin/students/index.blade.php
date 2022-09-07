@@ -49,21 +49,26 @@
             <th scope="col">Full name</th>
             <th scope="col">Avatar</th>
             <th scope="col">Email</th>
+            <th scope="col">Subjects</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody>
-      
+
         @foreach($students as $item)
         <tr>
             <td>{{$item->id}}</td>
             <td>{{$item->name}}</td>
             <td style="width: 10%;"><img src="{{asset($item->avatar)}}" alt="" width="100%"></td>
             <td>{{$item->email}}</td>
+            <td>{{$item->subjects->count()}}</td>
             <td>
                 <div>
                     <a href="{{route('students.edit',$item->id)}}">
-                        <button class="btn btn-warning">Update</button>
+                        <button class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                            </svg></button>
                     </a>
                 </div>
                 <div>
@@ -75,7 +80,7 @@
             </td>
         </tr>
         @endforeach
-       
+
     </tbody>
 </table>
 {{ $students->links() }}

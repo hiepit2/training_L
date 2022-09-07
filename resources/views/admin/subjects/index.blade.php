@@ -19,7 +19,7 @@
 
         </a>
     </div>
-    <form action="{{route('sub_subject', $student)}}" method="post">
+    <form action="{{route('subjects.sub_subject', $student)}}" method="post">
         @csrf
         @endcan
         <table class="table table-bordered">
@@ -68,30 +68,45 @@
                             <input type="checkbox">
                         </td>
                         @else
-                        @foreach($subject_point as $point)
-                        @if($subject->id == $point->id)
-                        <td>
-                            {{$point->pivot->point}}
-                        </td>
-                        <td class="study">
-                            Have learned
-                        </td>
-                        <td> </td>
-                        @else
-                        <td> </td>
-                        <td class="not_study">
-                            Haven't studied yet
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        @endif
-                        @endforeach
-                        @endif
 
+                        @for($i = 0; $i < $subject_point->count(); $i++)
+                            @if($subject->id == $subject_point[$i]->id)
+                            @if($subject_point[$i]->pivot->point == null)
+                            <td>
+                                null
+                            </td>
+                            <td class="study">
+                                Have learned
+                            </td>
+                            <td> </td>
+                            @else
+                            <td>
+                                {{$subject_point[$i]->pivot->point}}
+                            </td>
+                            <td class="study">
+                                Have learned
+                            </td>
+                            <td> </td>
+                            @endif
+                            @break
+
+                            @elseif($i == $subject_point->count() - 1)
+                            @if($subject->id != $subject_point[$i]->id)
+                            <td>
+
+                            </td>
+                            <td class="not_study">
+                                Haven't studied yet
+                            </td>
+                            <td><input type="checkbox"></td>
+                            @endif
+
+                            @endif
+                            @endfor
+
+                            @endif
                     </div>
                     @endcan
-
                 </tr>
                 @endforeach
             </tbody>
