@@ -46,25 +46,24 @@
     <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">Full name</th>
             <th scope="col">Avatar</th>
-            <th scope="col">Email</th>
+            <th scope="col">Full name</th>
             <th scope="col">Subjects</th>
-            <th scope="col">Action</th>
+            <th scope="col">Avatar</th>
+            <th scope="col">Detail</th>
         </tr>
     </thead>
     <tbody>
-
-        @foreach($students as $item)
+        @foreach($students as $student)
         <tr>
-            <td>{{$item->id}}</td>
-            <td>{{$item->name}}</td>
-            <td style="width: 10%;"><img src="{{asset($item->avatar)}}" alt="" width="100%"></td>
-            <td>{{$item->email}}</td>
-            <td>{{$item->subjects->count()}}</td>
+            <td>{{$student->id}}</td>
+            <td style="width: 10%;"><img src="{{asset($student->avatar)}}" alt="" width="100%"></td>
+            <td>{{$student->name}}</td>
+
+            <td>{{$student->subjects->count()}}</td>
             <td>
                 <div>
-                    <a href="{{route('students.edit',$item->id)}}">
+                    <a href="{{route('students.edit',$student->id)}}">
                         <button class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
@@ -72,10 +71,26 @@
                     </a>
                 </div>
                 <div>
-                    {{ Form::model($students, array('route' => array('students.destroy',$item->id), 'method' => 'DELETE'))}}
+                    {{ Form::model($students, array('route' => array('students.destroy',$student->id), 'method' => 'DELETE'))}}
                     {{ Form::submit('Delete', ['class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure you want to delete?')"])}}
                     {{ Form::close() }}
                 </div>
+
+            </td>
+            <td>
+                <a href="{{route('subjects.show',$student->id)}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                    </svg>
+                </a>
+                @if($student->subjects->count() < $count) {{ Form::model($student, ['route' => ['mail_subjects', $student], 'method' => 'get'])}} <button type="submit" onclick="return confirm('Do you want send to student?')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
+                    </svg>
+                    </button>
+                    {{ Form::close()}}
+                    @endif
 
             </td>
         </tr>

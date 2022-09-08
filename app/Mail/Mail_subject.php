@@ -3,24 +3,23 @@
 namespace App\Mail;
 
 use App\Models\Subject;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RegistMail extends Mailable
+class Mail_subject extends Mailable
 {
     use Queueable, SerializesModels;
-    private $user;
+    private $subjects;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(Array $subjects)
     {
-        $this->user = $user;
+        $this->subjects = $subjects;
     }
 
     /**
@@ -30,10 +29,10 @@ class RegistMail extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.sendMail')
-            ->subject('Thong bao')
-            ->with([
-                'user' => $this->user,
-            ]);
+        return $this->view('mail.mail_subject')
+        ->subject('Thông báo đăng ký môn học')
+        ->with([
+            'subjects' => $this->subjects,
+        ]);
     }
 }

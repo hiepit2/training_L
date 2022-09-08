@@ -25,10 +25,12 @@ class StudentController extends Controller
      */
     protected $studentRepo, $facultyRepo, $userRepo, $subjectRepo;
 
-    public function __construct(StudentRepositoryInterface $studentRepo,
-        FacultyRepositoryInterface $facultyRepo, UserRepositoryInterface $userRepo,
-        SubjectRepositoryInterface $subjectRepo)
-    {
+    public function __construct(
+        StudentRepositoryInterface $studentRepo,
+        FacultyRepositoryInterface $facultyRepo,
+        UserRepositoryInterface $userRepo,
+        SubjectRepositoryInterface $subjectRepo
+    ) {
         $this->studentRepo = $studentRepo;
         $this->facultyRepo = $facultyRepo;
         $this->userRepo = $userRepo;
@@ -41,19 +43,11 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        // $subjects = $this->subjectRepo->withStudent()->get();
-        $students = Student::with('subjects')->paginate(3);
-        // $students = $this->studentRepo->search($request->all());
-        // dd($students);
-        // foreach($students as $student){
-        //     $subject_point = $student->subjects;
-        //     echo '<pre>';
-        //     var_dump($student);
-        //     echo '</pre>';
-        // }
-        // $subjects = $this->subjectRepo->withStudent()->get();
-   
-        return view('admin.students.index', compact('students'));
+        $students = $this->studentRepo->search($request->all());
+        // $students = Student::with('subjects')->paginate(3);
+        
+        $count = $this->subjectRepo->getSubject()->count();
+        return view('admin.students.index', compact('students', 'count'));
     }
 
     /**
@@ -65,7 +59,6 @@ class StudentController extends Controller
     {
         $student = $this->studentRepo->newModel();
         $faculties = $this->facultyRepo->pluck('id', 'name');
-
         return view('admin.students.create', compact('student', 'faculties'));
     }
 
@@ -113,7 +106,7 @@ class StudentController extends Controller
         $request['user_id'] = $user_id;
         $code = $user_id;
         for ($i = 0; strlen($code) < 6; $i++) {
-            $code = '0' .$code;
+            $code = '0' . $code;
             $i++;
         }
 
@@ -172,7 +165,7 @@ class StudentController extends Controller
         if ($request['phone'] == '') {
             $request['phone'] = '';
         }
-      
+
         $data = $request->all();
         if ($request->hasFile('avatar')) {
             $avatar = $request->avatar;

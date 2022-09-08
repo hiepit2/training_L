@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SubjectRequest;
+use App\Mail\Mail_subject;
+use App\Mail\RegistMail;
 use App\Models\Student;
 use App\Models\Student_subject;
 use App\Models\Subject;
@@ -11,6 +13,7 @@ use App\Repositories\Students\StudentRepositoryInterface;
 use App\Repositories\Subjects\SubjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class SubjectController extends Controller
 {
@@ -32,19 +35,31 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        // dd(Auth::user()->roles[0]->name);
+        //
         $subjects = $this->subjectRepo->withStudent()->paginate(3);
         if (Auth::user()->roles[0]->name == 'teacher') {
             return view('admin.subjects.index', compact('subjects'));
         }
         $student = Student::where('user_id', Auth::id())->first();
-      
+
         $subject_point = $student->subjects;
-        
-       
-        if(!isset($subject_point[0])){
+        if (!isset($subject_point[0])) {
             $subject_po = 1;
             return view('admin.subjects.index', compact('subjects', 'subject_po', 'student'));
+        }
+
+        //
+        $sum = $average = 0;
+        if ($subject_point->count() == $subjects->count()) {
+            foreach ($subject_point as $item) {
+                if ($item->pivot->point) {
+                    $sum += $item->pivot->point;
+                } else {
+                    $sum = 0;
+                    break;
+                }
+            }
+            $average = round($sum / $subject_point->count(), 2);
         }
         return view('admin.subjects.index', compact('subjects', 'subject_point', 'student'));
     }
@@ -81,6 +96,26 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
+        $subjects = $this->subjectRepo->withStudent();
+        $student = $this->studentRepo->find($id);
+        $subject_po = $student->subjects;
+        $sum = 0;
+        $average = 0;
+        if ($subject_po->count() == $subjects->count()) {
+            foreach ($subject_po as $item) {
+                if ($item->pivot->point) {
+                    $sum += $item->pivot->point;
+                } else {
+                    $sum = 0;
+                    break;
+                }
+            }
+            $average = round($sum / $subject_po->count(), 2);
+        }
+
+        $subject_point = $student->subjects()->paginate(3);
+
+        return view('admin.subjects.show', compact('subject_point', 'student', 'average'));
     }
 
     /**
@@ -127,7 +162,40 @@ class SubjectController extends Controller
         }
     }
 
-    public function sub_subject(Request $request, $id){
-        // dd($request);
+    public function sub_subject(Request $request)
+    {
+        dd($request);
+    }
+
+    public function mail_subjects($id)
+    {
+        $listSubject = [];
+        $subs = Subject::all();
+        $subjects = $this->subjectRepo->withStudent();
+        $student = $this->studentRepo->find($id);
+        $subject_point = $student->subjects;
+        if($subject_point->count() == 0){
+            $listSubject = $subs;
+        }
+        else{
+            foreach ($subs as $sub) {
+                for ($i = 0; $i < $subject_point->count(); $i++) {
+                    if ($sub->id == $subject_point[$i]->id) {
+                        break;
+                    } elseif ($i == $subject_point->count() - 1) {
+                        if ($sub->id != $subject_point[$i]->id) {
+                            $listSubject[] =  $sub;
+                        }
+                    }
+                }
+            }
+        }
+        // dd($listSubject);
+
+        $mailable = new Mail_subject($listSubject);
+        Mail::to($student->email)->send($mailable);
+
+
+        // return redirect()->route('subjects.index')->with('message', 'Successfully');
     }
 }

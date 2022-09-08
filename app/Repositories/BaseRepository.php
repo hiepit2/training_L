@@ -42,10 +42,7 @@ abstract class BaseRepository implements RepositoryInterface
     {
         return $this->model->select()->orderby('updated_at','desc')->paginate(3);
     }
-    // public function getJoin()
-    // {
-    //     return $this->model->join('student_subject','stud')->orderby('updated_at','desc')->paginate(3);
-    // }
+    
     public function getSome()
     {
         return $this->model->select('id')->get();

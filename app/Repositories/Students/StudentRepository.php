@@ -22,7 +22,7 @@ class StudentRepository extends BaseRepository implements StudentRepositoryInter
 
     public function search($data)
     {
-        $student = $this->model->newQuery()->orderby('updated_at', 'DESC');
+        $student = $this->model->newQuery()->with('subjects');
 
         if (isset($data['age_from'])) {
             $student->whereYear('birthday', '<=', Carbon::now()->subYear($data['age_from'])->format('Y'));
@@ -32,18 +32,18 @@ class StudentRepository extends BaseRepository implements StudentRepositoryInter
             $student->whereYear('birthday', '>=', Carbon::now()->subYear($data['age_to'])->format('Y'));
         }
 
-        if (isset($data['point_from']) && !isset($data['point_to'])) {
-            $student->join('student_subject', 'students.id', '=', 'student_subject.student_id')->where('point', '>=', $data['point_from']);
-        }
+        // if (isset($data['point_from']) && !isset($data['point_to'])) {
+        //     $student->where('point', '>=', $data['point_from']);
+        // }
 
-        if (isset($data['point_to']) && !isset($data['point_from'])) {
-            $student->join('student_subject', 'students.id', '=', 'student_subject.student_id')->where('point', '<=', $data['point_to']);
-        }
+        // if (isset($data['point_to']) && !isset($data['point_from'])) {
+        //     $student->where('point', '<=', $data['point_to']);
+        // }
 
-        if (isset($data['point_to']) && isset($data['point_from'])) {
-            $student->join('student_subject', 'students.id', '=', 'student_subject.student_id')->where('point', '>=', $data['point_from']);
-            $student->where('point', '<=', $data['point_to']);
-        }
+        // if (isset($data['point_to']) && isset($data['point_from'])) {
+        //     $student->where('point', '>=', $data['point_from']);
+        //     $student->where('point', '<=', $data['point_to']);
+        // }
 
         return $student->paginate(3)->withQueryString();
     }

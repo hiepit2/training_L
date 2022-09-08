@@ -19,7 +19,7 @@
 
         </a>
     </div>
-    <form action="{{route('subjects.sub_subject', $student)}}" method="post">
+    <form action="{{route('sub_subject')}}" method="get">
         @csrf
         @endcan
         <table class="table table-bordered">
@@ -65,13 +65,13 @@
                             Haven't studied yet
                         </td>
                         <td>
-                            <input type="checkbox">
+                            <input type="checkbox" name="">
                         </td>
                         @else
 
                         @for($i = 0; $i < $subject_point->count(); $i++)
                             @if($subject->id == $subject_point[$i]->id)
-                            @if($subject_point[$i]->pivot->point == null)
+                            @if(!$subject_point[$i]->pivot->point)
                             <td>
                                 null
                             </td>
@@ -98,7 +98,7 @@
                             <td class="not_study">
                                 Haven't studied yet
                             </td>
-                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox" onclick="btn" name="subject_id" value="{{$subject->id}}"></td>
                             @endif
 
                             @endif
@@ -109,6 +109,7 @@
                     @endcan
                 </tr>
                 @endforeach
+
             </tbody>
         </table>
         @can('show')
@@ -124,8 +125,8 @@
     {{ $subjects->links() }}
 </div>
 
-
 @endsection
+
 <style>
     .action {
         display: flex;
