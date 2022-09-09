@@ -17,7 +17,7 @@ class Mail_subject extends Mailable
      *
      * @return void
      */
-    public function __construct(Array $subjects)
+    public function __construct($subjects)
     {
         $this->subjects = $subjects;
     }

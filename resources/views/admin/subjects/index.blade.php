@@ -65,7 +65,7 @@
                             Haven't studied yet
                         </td>
                         <td>
-                            <input type="checkbox" name="">
+                            <input name="subject_id[]" value="{{$subject->id}}" type="checkbox">
                         </td>
                         @else
 
@@ -89,18 +89,14 @@
                             <td> </td>
                             @endif
                             @break
-
                             @elseif($i == $subject_point->count() - 1)
-                            @if($subject->id != $subject_point[$i]->id)
                             <td>
-
                             </td>
                             <td class="not_study">
                                 Haven't studied yet
                             </td>
-                            <td><input type="checkbox" onclick="btn" name="subject_id" value="{{$subject->id}}"></td>
-                            @endif
-
+                            <td><input name="subject_id[]" value="{{$subject->id}}" type="checkbox"></td>
+                            <!-- <td><input type="checkbox" onclick="btn" name="subject_id" value="{{$subject->id}}"></td> -->
                             @endif
                             @endfor
 
@@ -113,6 +109,17 @@
             </tbody>
         </table>
         @can('show')
+        <table class="table table-bordered" style="margin-bottom: 50px;">
+            <thead>
+                @if($average != 0)
+                <tr>
+                    <th scope="col">Average:</th>
+                    <th scope="col">{{$average}}</th>
+                    
+                </tr>
+                @endif
+            </thead>
+        </table>
         <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
             </div>

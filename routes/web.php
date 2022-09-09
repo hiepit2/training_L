@@ -38,6 +38,7 @@ Route::group(['middleware' => ['permission:list|show']], function () {
     Route::resource('students', StudentController::class)->only('show');
     Route::resource('subjects', SubjectController::class)->only('index');
     Route::get('/mail_subjects/{id}', [SubjectController::class, 'mail_subjects'])->name('mail_subjects');
+    Route::get('/mail_subjects_all', [SubjectController::class, 'mail_subjects_all'])->name('mail_subjects_all');
 });
 
 

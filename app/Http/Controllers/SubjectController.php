@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Repositories\Students\StudentRepositoryInterface;
 use App\Repositories\Subjects\SubjectRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -36,19 +37,18 @@ class SubjectController extends Controller
     public function index()
     {
         //
-        $subjects = $this->subjectRepo->withStudent()->paginate(3);
+        $subjects = $this->subjectRepo->withStudent()->get();
         if (Auth::user()->roles[0]->name == 'teacher') {
             return view('admin.subjects.index', compact('subjects'));
         }
         $student = Student::where('user_id', Auth::id())->first();
-
+        
         $subject_point = $student->subjects;
         if (!isset($subject_point[0])) {
             $subject_po = 1;
             return view('admin.subjects.index', compact('subjects', 'subject_po', 'student'));
         }
-
-        //
+        
         $sum = $average = 0;
         if ($subject_point->count() == $subjects->count()) {
             foreach ($subject_point as $item) {
@@ -61,7 +61,8 @@ class SubjectController extends Controller
             }
             $average = round($sum / $subject_point->count(), 2);
         }
-        return view('admin.subjects.index', compact('subjects', 'subject_point', 'student'));
+        $subjects = $this->subjectRepo->withStudent()->paginate(3);
+        return view('admin.subjects.index', compact('subjects', 'subject_point', 'student', 'average'));
     }
 
     /**
@@ -112,7 +113,6 @@ class SubjectController extends Controller
             }
             $average = round($sum / $subject_po->count(), 2);
         }
-
         $subject_point = $student->subjects()->paginate(3);
 
         return view('admin.subjects.show', compact('subject_point', 'student', 'average'));
@@ -164,38 +164,63 @@ class SubjectController extends Controller
 
     public function sub_subject(Request $request)
     {
-        dd($request);
+        $students = $this->studentRepo->newModel();
+        $studentId = Student::where('user_id', '=', Auth::user()->id)->first()->id;
+        $subject = $students->subjects()->attach($request->subject_id, ['student_id' => $studentId]);
+        return redirect()->route('subjects.index')->with('message', 'Successfully');
     }
 
     public function mail_subjects($id)
     {
-        $listSubject = [];
         $subs = Subject::all();
         $subjects = $this->subjectRepo->withStudent();
+        $listSubject = [];
         $student = $this->studentRepo->find($id);
         $subject_point = $student->subjects;
-        if($subject_point->count() == 0){
+        if ($subject_point->count() == 0) {
             $listSubject = $subs;
-        }
-        else{
+        } else {
             foreach ($subs as $sub) {
                 for ($i = 0; $i < $subject_point->count(); $i++) {
-                    if ($sub->id == $subject_point[$i]->id) {
-                        break;
-                    } elseif ($i == $subject_point->count() - 1) {
+                    if ($sub->id != $subject_point[$i]->id) {
+                        $listSubject[] =  $sub;
+                    }
+                }
+            }
+        }
+        $mailable = new Mail_subject($listSubject);
+        Mail::to($student->email)->send($mailable);
+        return redirect()->route('subjects.index')->with('message', 'Successfully');
+    }
+
+    public function mail_subjects_all()
+    {
+        $subs = Subject::all();
+        $subjects = $this->subjectRepo->withStudent();
+        $students = Student::all();
+        foreach ($students as $student) {
+            if ($student->subjects->count() !== $subs->count()) {
+                $listIds[] = $student->id;
+            }
+        }
+        foreach ($listIds as $value) {
+            $listSubject = [];
+            $student = $this->studentRepo->find($value);
+            $subject_point = $student->subjects;
+            if ($subject_point->count() == 0) {
+                $listSubject = $subs;
+            } else {
+                foreach ($subs as $sub) {
+                    for ($i = 0; $i < $subject_point->count(); $i++) {
                         if ($sub->id != $subject_point[$i]->id) {
                             $listSubject[] =  $sub;
                         }
                     }
                 }
             }
+            $mailable = new Mail_subject($listSubject);
+            Mail::to($student->email)->send($mailable);
         }
-        // dd($listSubject);
-
-        $mailable = new Mail_subject($listSubject);
-        Mail::to($student->email)->send($mailable);
-
-
-        // return redirect()->route('subjects.index')->with('message', 'Successfully');
+        return redirect()->route('students.index')->with('message', 'Successfully');
     }
 }
