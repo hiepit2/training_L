@@ -47,6 +47,9 @@
                         <a href="{{route('subjects.edit',$subject->id)}}">
                             {{ Form::submit('Update', ['class' => 'btn btn-warning'])}}
                         </a>
+                        <a href="{{route('edit_point',$subject->id)}}">
+                            {{ Form::submit('Update point', ['class' => 'btn btn-secondary'])}}
+                        </a>
                         @endcan
                         @can('delete')
                         <div>
@@ -96,7 +99,6 @@
                                 Haven't studied yet
                             </td>
                             <td><input name="subject_id[]" value="{{$subject->id}}" type="checkbox"></td>
-                            <!-- <td><input type="checkbox" onclick="btn" name="subject_id" value="{{$subject->id}}"></td> -->
                             @endif
                             @endfor
 

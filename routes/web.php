@@ -31,14 +31,15 @@ Route::group(['middleware' => ['role:teacher']], function () {
     Route::resource('faculties', FacultyController::class);
     Route::resource('subjects', SubjectController::class);
     Route::resource('students', StudentController::class);
+    Route::get('/mail_subjects/{id}', [SubjectController::class, 'mail_subjects'])->name('mail_subjects');
+    Route::get('edit_point/{id}', [SubjectController::class, 'edit_point'])->name('edit_point');
+    Route::get('/mail_subjects_all', [SubjectController::class, 'mail_subjects_all'])->name('mail_subjects_all');
 });
 
 Route::group(['middleware' => ['permission:list|show']], function () {
     Route::resource('faculties', FacultyController::class)->only('index');
     Route::resource('students', StudentController::class)->only('show');
     Route::resource('subjects', SubjectController::class)->only('index');
-    Route::get('/mail_subjects/{id}', [SubjectController::class, 'mail_subjects'])->name('mail_subjects');
-    Route::get('/mail_subjects_all', [SubjectController::class, 'mail_subjects_all'])->name('mail_subjects_all');
 });
 
 

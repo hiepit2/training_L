@@ -36,19 +36,19 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        //
         $subjects = $this->subjectRepo->withStudent()->get();
         if (Auth::user()->roles[0]->name == 'teacher') {
+            $subjects = $this->subjectRepo->withStudent()->paginate(3);
             return view('admin.subjects.index', compact('subjects'));
         }
         $student = Student::where('user_id', Auth::id())->first();
-        
+
         $subject_point = $student->subjects;
         if (!isset($subject_point[0])) {
             $subject_po = 1;
             return view('admin.subjects.index', compact('subjects', 'subject_po', 'student'));
         }
-        
+
         $sum = $average = 0;
         if ($subject_point->count() == $subjects->count()) {
             foreach ($subject_point as $item) {
@@ -182,15 +182,18 @@ class SubjectController extends Controller
         } else {
             foreach ($subs as $sub) {
                 for ($i = 0; $i < $subject_point->count(); $i++) {
-                    if ($sub->id != $subject_point[$i]->id) {
+                    if ($sub->id == $subject_point[$i]->id) {
+                        break;
+                    } elseif ($i == $subject_point->count() - 1) {
                         $listSubject[] =  $sub;
                     }
                 }
             }
         }
+
         $mailable = new Mail_subject($listSubject);
         Mail::to($student->email)->send($mailable);
-        return redirect()->route('subjects.index')->with('message', 'Successfully');
+        return redirect()->route('students.index')->with('message', 'Successfully');
     }
 
     public function mail_subjects_all()
@@ -203,6 +206,7 @@ class SubjectController extends Controller
                 $listIds[] = $student->id;
             }
         }
+        dd($listIds);
         foreach ($listIds as $value) {
             $listSubject = [];
             $student = $this->studentRepo->find($value);
@@ -212,7 +216,9 @@ class SubjectController extends Controller
             } else {
                 foreach ($subs as $sub) {
                     for ($i = 0; $i < $subject_point->count(); $i++) {
-                        if ($sub->id != $subject_point[$i]->id) {
+                        if ($sub->id == $subject_point[$i]->id) {
+                            break;
+                        } elseif ($i == $subject_point->count() - 1) {
                             $listSubject[] =  $sub;
                         }
                     }
@@ -222,5 +228,28 @@ class SubjectController extends Controller
             Mail::to($student->email)->send($mailable);
         }
         return redirect()->route('students.index')->with('message', 'Successfully');
+    }
+
+    //update point
+    public function edit_point($id)
+    {
+        $students = Student::with('subjects')->get();
+        $count = $students->count();
+        foreach($students as $student){
+            foreach($student->subjects as $item){
+                if($item->pivot->subject_id == $id){
+                    $student_subject[] = $item;
+                }
+            }
+        }
+        // for ($i = 0; $i < $count; $i++) {
+        //     echo $students[$i]->subjects;
+            // if ($students[$i]->subjects) {
+            //     echo 1;
+                // $student_subject[] = $students[$i]->subjects;
+            // }
+        // }
+
+        dd($student_subject);
     }
 }

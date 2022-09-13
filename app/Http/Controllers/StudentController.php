@@ -43,9 +43,8 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $students = $this->studentRepo->search($request->all());
-        // $students = Student::with('subjects')->paginate(3);
         $count = $this->subjectRepo->getSubject()->count();
+        $students = $this->studentRepo->search($request->all())->paginate(3);
         return view('admin.students.index', compact('students', 'count'));
     }
 

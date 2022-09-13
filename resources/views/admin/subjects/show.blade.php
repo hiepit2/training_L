@@ -28,7 +28,7 @@
     </table>
     <table class="table table-bordered" style="margin-bottom: 50px;">
         <thead>
-            @if($average != 0)
+            @if($average)
             <tr>
                 <th scope="col">Average:</th>
                 <th scope="col">{{$average}}</th>
