@@ -66,18 +66,14 @@
 
             <td>
                 @if($student->subjects->count() == 0)
-                @elseif($student->subjects->count() < $count) 
-                    Studing 
-                @else 
-                    @for($i = 0; $i < $count; $i++)
-                        @if(!$student->subjects[$i]->pivot->point)
-                            Studing 
-                            @break
-                        @elseif($i == $count -1)
-                            {{round($student->subjects->avg('pivot.point'), 2)}}
-                        @endif
+                @elseif($student->subjects->count() < $count) Studing @else @for($i=0; $i < $count; $i++) @if(!$student->subjects[$i]->pivot->point)
+                    Studing
+                    @break
+                    @elseif($i == $count -1)
+                    {{round($student->subjects->avg('pivot.point'), 2)}}
+                    @endif
                     @endfor
-                @endif 
+                    @endif
             </td>
             <td>{{$student->subjects->count()}} / {{$count}}</td>
             <td>
@@ -96,22 +92,24 @@
                     {{ Form::submit('Delete', ['class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure you want to delete?')"])}}
                     {{ Form::close() }}
                 </div>
-
             </td>
             <td>
                 <a href="{{route('subjects.show',$student->id)}}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
-                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-                    </svg>
-                </a>
-                @if($student->subjects->count() < $count) {{ Form::model($student, ['route' => ['mail_subjects', $student], 'method' => 'get'])}} <button type="submit" onclick="return confirm('Do you want send to student?')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
-                    </svg>
+                    <button class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                        </svg>
                     </button>
+                </a>
+                @if($student->subjects->count() < $count) 
+                    {{ Form::model($student, ['route' => ['mail_subjects', $student], 'method' => 'get'])}} 
+                        <button class="btn btn-secondary" type="submit" onclick="return confirm('Do you want send to student?')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
+                            </svg>
+                        </button>
                     {{ Form::close()}}
-                    @endif
+                @endif
 
             </td>
         </tr>

@@ -31,13 +31,14 @@ class StudentRepository extends BaseRepository implements StudentRepositoryInter
         if (isset($data['age_to'])) {
             $students->whereYear('birthday', '>=', Carbon::now()->subYear($data['age_to'])->format('Y'));
         }
+        
         if (isset($data['point_from'])) {
             $students->has('subjects', function ($q) {
-                $q->wherePoint('point', '=', 7);
+                $q->where('point', '>=', 5);
             });
         }
         
-        return $students;
+        return $students; $data;
     }
 
     public function show_student($id)

@@ -47,8 +47,8 @@
                         <a href="{{route('subjects.edit',$subject->id)}}">
                             {{ Form::submit('Update', ['class' => 'btn btn-warning'])}}
                         </a>
-                        <a href="{{route('edit_point',$subject->id)}}">
-                            {{ Form::submit('Update point', ['class' => 'btn btn-secondary'])}}
+                        <a href="{{route('create_point',$subject->id)}}">
+                            {{ Form::submit('Point', ['class' => 'btn btn-secondary'])}}
                         </a>
                         @endcan
                         @can('delete')
@@ -124,9 +124,6 @@
         </table>
         <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
-            </div>
-            <div class="input-group">
-                <button type="submit" class="btn btn-outline-success">Success</button>
             </div>
         </div>
     </form>

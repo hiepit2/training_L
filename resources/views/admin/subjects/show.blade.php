@@ -2,7 +2,10 @@
 @section('title','List of registered subjects')
 @section('content')
 <div class="container">
-    <table class="table table-bordered">
+    <a href="{{route('impost_students', $student)}}">
+        <button type="button" class="btn btn-info">Import</button>
+    </a>
+    <table class="table">
         <thead>
             <tr>
                 <th scope="col">ID</th>

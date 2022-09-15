@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StudentsExport;
 use App\Http\Requests\StudentRequest;
+use App\Imports\StudentsImport;
 use App\Mail\RegistMail;
 use App\Models\Student;
 use App\Models\Subject;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -192,6 +195,29 @@ class StudentController extends Controller
 
     public function update_profile(Request $request, $id)
     {
-        dd($request);
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->avatar;
+            $avatarName = $avatar->hashName();
+            $avatarName = $request->name . '_' . $avatarName;
+            $request->avatar = $avatar->storeAs('images/students', $avatarName);
+            $data['avatar'] = $request->avatar;
+        }
+        $student = $this->studentRepo->update($id, $data);
+        return redirect()->back()->with('message', 'Successfully');
+    }
+
+    public function impost_students($id)
+    {
+        return view('admin.students.import', compact('id'));
+    }
+
+    public function upload_students(Request $request)
+    {
+        Excel::import(new StudentsImport, $request->file);
+        return redirect()->route('students.index')->with('message', 'Student Imported Successfully');
+    }
+
+    public function export_students($id){
+        return Excel::download(new StudentsExport($id), 'students.xlsx');
     }
 }

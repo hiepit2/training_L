@@ -7,39 +7,18 @@
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-body text-center">
+            {{ Form::model($student, ['route'=> ['update_profile', $student], 'method' => 'put', 'enctype'=>'multipart/form-data'])}}
+            <!-- <form action="route('update_profile',)"> -->
             <img src="{{asset($student->avatar)}}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+            <input type="file" name="avatar">
             <h5 class="my-3">{{$student->name}}</h5>
             <div class="d-flex justify-content-center mb-2">
               <button type="submit" class="btn btn-outline-primary ms-1">UPDATE PROFILE</button>
             </div>
+            <!-- </form> -->
+            {{ Form::close() }}
           </div>
         </div>
-        <!-- <div class="card mb-4 mb-lg-0">
-          <div class="card-body p-0">
-            <ul class="list-group list-group-flush rounded-3">
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fas fa-globe fa-lg text-warning"></i>
-                <p class="mb-0">https://mdbootstrap.com</p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fab fa-github fa-lg" style="color: #333333;"></i>
-                <p class="mb-0">mdbootstrap</p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
-                <p class="mb-0">@mdbootstrap</p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                <p class="mb-0">mdbootstrap</p>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
-                <p class="mb-0">mdbootstrap</p>
-              </li>
-            </ul>
-          </div>
-        </div> -->
       </div>
       <div class="col-lg-8">
         <div class="card mb-4">
