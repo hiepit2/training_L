@@ -71,6 +71,7 @@ class StudentController extends Controller
      */
     public function store(StudentRequest $request)
     {
+        // dd($request);
         if ($request['name'] == '') {
             $request['name'] = 'student';
         }

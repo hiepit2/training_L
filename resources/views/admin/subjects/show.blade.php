@@ -2,9 +2,11 @@
 @section('title','List of registered subjects')
 @section('content')
 <div class="container">
-    <a href="{{route('impost_students', $student)}}">
-        <button type="button" class="btn btn-info">Import</button>
-    </a>
+    <div class="form-group">
+        <a href="{{route('impost_students', $student)}}">
+            <button type="button" class="btn btn-info">Import</button>
+        </a>
+    </div>
     <table class="table">
         <thead>
             <tr>

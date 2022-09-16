@@ -264,13 +264,14 @@ class SubjectController extends Controller
     public function upload_subjects(Request $request, $id)
     {
         $subject = $this->subjectRepo->withStudent()->find($id);
-        // dd($subject);
         $imports = Excel::toCollection(new SubjectsImport($id), request()->file('import_file'));
         foreach($imports[0] as $import){
-            // dd($import[0]);
             foreach($subject->students as $student){
+                // dd($student->pivot->subject_id);
                 if($import['id'] == $student['id']){
-                    $student->pivot->where('student_id', '=', $student['id'])->update([
+                    $student->pivot->where('subject_id', '=', $id)
+                    ->where('student_id', '=', $student['id'])
+                    ->update([
                         'point' => $import['point'],
                     ]);
                     // break;

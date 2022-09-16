@@ -7,8 +7,6 @@
             <button type="button" class="btn btn-info">Import</button>
         </a>
     </div>
-    {{ Form::model($students, ['route'=> ['store_point'], 'method' => 'put'])}}
-    {{ csrf_field() }}
     <table class="table">
         <thead>
             <tr>
@@ -26,9 +24,13 @@
                 <td>{{$student->name}}</td>
                 <td>
                     @foreach($student->subjects as $item)
-                    @if($item->id == $id)
-                    {{$item->pivot->point}}
-                    @endif
+                        @if($item->id == $id)
+                            @if($item->pivot->point)
+                                {{$item->pivot->point}}
+                            @else
+                                null
+                            @endif
+                        @endif
                     @endforeach
                 </td>
             </tr>
@@ -36,14 +38,6 @@
 
         </tbody>
     </table>
-    <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group" role="group" aria-label="First group">
-        </div>
-        <div class="input-group">
-            <button type="submit" class="btn btn-outline-success">Success</button>
-        </div>
-    </div>
-    {{ Form::close() }}
 </div>
 
 @endsection

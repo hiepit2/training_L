@@ -16,12 +16,12 @@
     {{ Form::label('email', 'Email') }}
     {{ Form::text('email', '', array('class' => 'form-control')) }}
 </div>
-<div class="form-group">
+<!-- <div class="form-group">
     {{ Form::label('faculty', 'Faculty')}}
-    {{ Form::select('faculty_id', $faculties, $student->faculty_id, ['class' => 'form-control']) }}
+    {{ Form::select('faculty_id', $faculties, $student->faculty_id, ['class' => 'form-control']) }} -->
 
     <!-- {{ Form::select('faculty_id', ['class' => 'form-control'])}} -->
-</div>
+<!-- </div> -->
 <div class="form-group">
     {{ Form::label('address', 'Address')}}
     {{ Form::text('address', '',array('class' => 'form-control'))}}
