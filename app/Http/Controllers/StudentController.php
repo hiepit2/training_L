@@ -13,11 +13,13 @@ use App\Repositories\Faculties\FacultyRepositoryInterface;
 use App\Repositories\Students\StudentRepositoryInterface;
 use App\Repositories\Subjects\SubjectRepositoryInterface;
 use App\Repositories\Users\UserRepositoryInterface;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
@@ -59,8 +61,8 @@ class StudentController extends Controller
     public function create()
     {
         $student = $this->studentRepo->newModel();
-        $faculties = $this->facultyRepo->pluck('id', 'name');
-        return view('admin.students.create', compact('student', 'faculties'));
+        // $faculties = $this->facultyRepo->pluck('id', 'name');
+        return view('admin.students.create', compact('student'));
     }
 
     /**
@@ -69,9 +71,27 @@ class StudentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StudentRequest $request)
+
+    // public function storeStudent(Request $request)
+    // {
+    //     $student = $this->studentRepo->newModel();
+    //     dd($student);
+    //     return response()->json([
+    //         'student' => $student,
+    //     ], 200);
+    // }
+
+    public function store(Request $request)
     {
-        // dd($request);
+        // $errors = $request->validate([
+        //     'email' => ['required', 'unique:email'],
+        // ]);
+        dd($request);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+           
+        ]);
+        dd($validator);
         if ($request['name'] == '') {
             $request['name'] = 'student';
         }
@@ -123,6 +143,8 @@ class StudentController extends Controller
         Mail::to($request->email)->send($mailable);
         return redirect()->route('students.index')->with('message', 'Successfully');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -218,7 +240,13 @@ class StudentController extends Controller
         return redirect()->route('students.index')->with('message', 'Student Imported Successfully');
     }
 
-    public function export_students($id){
+    public function export_students($id)
+    {
         return Excel::download(new StudentsExport($id), 'students.xlsx');
+    }
+
+    public function get_student($id){
+        return Student::with('subjects')->find($id);
+        // return $this->studentRepo->find($id);
     }
 }

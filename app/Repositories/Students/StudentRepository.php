@@ -32,17 +32,19 @@ class StudentRepository extends BaseRepository implements StudentRepositoryInter
             $students->whereYear('birthday', '>=', Carbon::now()->subYear($data['age_to'])->format('Y'));
         }
         
-        if (isset($data['point_from'])) {
-            $students->has('subjects', function ($q) {
-                $q->where('point', '>=', 5);
-            });
-        }
+        // if (isset($data['point_from'])) {
+        //     $students->has('subjects', function ($q) {
+        //         $avg = round($q->subjects->avg('pivot.point', 2));
+        //         $q->where($avg, '=', 5);
+        //     });
+        // }
         
-        return $students; $data;
+        return $students;
     }
 
     public function show_student($id)
     {
         return $this->model->where('user_id', '=', $id)->first();
     }
+
 }

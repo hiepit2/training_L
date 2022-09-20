@@ -6,6 +6,9 @@
     <div class="add">
         <a href="{{route('subjects.create')}}" class="btn btn-success">+</a>
     </div>
+    <div class="add">
+        <a href="{{route('mail_avg')}}" class="btn btn-success">MAil auto</a>
+    </div>
     @endcan
     @can('show')
     <div class="add">

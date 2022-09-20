@@ -40,13 +40,18 @@ Route::group(['middleware' => ['role:teacher']], function () {
     Route::post('/upload_students', [StudentController::class, 'upload_students'])->name('upload_students');
     Route::get('/export_students/{id}', [StudentController::class, 'export_students'])->name('export_students');
 
+    Route::get('/get_student/{id}', [StudentController::class, 'get_student'])->name('get_student');
+    
+    
     Route::get('/mail_subjects/{id}', [SubjectController::class, 'mail_subjects'])->name('mail_subjects');
     Route::get('/create_point/{id}', [SubjectController::class, 'create_point'])->name('create_point');
     Route::put('/store_point', [SubjectController::class, 'store_point'])->name('store_point');
     Route::get('/mail_subjects_all', [SubjectController::class, 'mail_subjects_all'])->name('mail_subjects_all');
+    Route::get('/mail_avg', [SubjectController::class, 'mail_avg'])->name('mail_avg');
     
     
 });
+// Route::post('/storeStudent', [StudentController::class, 'storeStudent'])->name('storeStudent');
 
 Route::group(['middleware' => ['permission:list|show']], function () {
     Route::resource('faculties', FacultyController::class)->only('index');

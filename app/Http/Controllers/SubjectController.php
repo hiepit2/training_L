@@ -53,7 +53,7 @@ class SubjectController extends Controller
             $subject_po = 1;
             return view('admin.subjects.index', compact('subjects', 'subject_po', 'student', 'average'));
         }
-        
+
         if ($subject_point->count() == $subjects->count()) {
             foreach ($subject_point as $item) {
                 if ($item->pivot->point) {
@@ -194,12 +194,12 @@ class SubjectController extends Controller
                 }
             }
         }
-        
+
         $mailable = new Mail_subject($listSubject);
         Mail::to($student->email)->send($mailable);
         return redirect()->route('students.index')->with('message', 'Successfully');
     }
-    
+
     //send mail subjects to people
     public function mail_subjects_all()
     {
@@ -211,7 +211,7 @@ class SubjectController extends Controller
                 $listIds[] = $student->id;
             }
         }
-        dd($listIds);
+       
         foreach ($listIds as $value) {
             $listSubject = [];
             $student = $this->studentRepo->find($value);
@@ -240,9 +240,9 @@ class SubjectController extends Controller
     {
         $student_all = Student::with('subjects')->get();
         // $count = $student_all->count();
-        foreach($student_all as $student){
-            foreach($student->subjects as $item){
-                if($item->pivot->subject_id == $id){
+        foreach ($student_all as $student) {
+            foreach ($student->subjects as $item) {
+                if ($item->pivot->subject_id == $id) {
                     $students[] = $student;
                 }
             }
@@ -251,7 +251,8 @@ class SubjectController extends Controller
     }
 
     //store_point
-    public function store_point(Request $request){
+    public function store_point(Request $request)
+    {
         dd($request);
     }
 
@@ -265,15 +266,15 @@ class SubjectController extends Controller
     {
         $subject = $this->subjectRepo->withStudent()->find($id);
         $imports = Excel::toCollection(new SubjectsImport($id), request()->file('import_file'));
-        foreach($imports[0] as $import){
-            foreach($subject->students as $student){
+        foreach ($imports[0] as $import) {
+            foreach ($subject->students as $student) {
                 // dd($student->pivot->subject_id);
-                if($import['id'] == $student['id']){
+                if ($import['id'] == $student['id']) {
                     $student->pivot->where('subject_id', '=', $id)
-                    ->where('student_id', '=', $student['id'])
-                    ->update([
-                        'point' => $import['point'],
-                    ]);
+                        ->where('student_id', '=', $student['id'])
+                        ->update([
+                            'point' => $import['point'],
+                        ]);
                     // break;
                 }
             }
@@ -282,7 +283,28 @@ class SubjectController extends Controller
         return redirect()->route('subjects.index')->with('message', 'Subject Imported Successfully');
     }
 
-    public function export_subjects($id){
+    public function export_subjects($id)
+    {
         return Excel::download(new SubjectsExport($id), 'subjects.xlsx');
+    }
+
+    public function mail_avg()
+    {
+        $subjects = $this->subjectRepo->newModel()->get();
+        $students = $this->studentRepo->newModel()->with('subjects')->get();
+        foreach ($students as $student) {
+            if ($student->subjects->count() == $subjects->count()) {
+                for ($i = 0; $i < $subjects->count(); $i++) {
+                    if (!$student->subjects[$i]->pivot->point) {
+                        break;
+                    }
+                    elseif($i == $subjects->count() - 1){
+                        $student['avg'] = round($student->subjects->avg('pivot.point',2));
+                        $listStudent[] = $student;
+                    }
+                }
+            }
+        }
+        dd($listStudent);
     }
 }
