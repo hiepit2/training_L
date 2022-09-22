@@ -211,7 +211,7 @@ class SubjectController extends Controller
                 $listIds[] = $student->id;
             }
         }
-       
+
         foreach ($listIds as $value) {
             $listSubject = [];
             $student = $this->studentRepo->find($value);
@@ -251,9 +251,18 @@ class SubjectController extends Controller
     }
 
     //store_point
-    public function store_point(Request $request)
+    public function store_point(Request $request, $id)
     {
-        dd($request);
+        $student = $this->studentRepo->findStudent($id);
+        for ($i = 0; $i < $student->subjects->count(); $i++) {
+            if ($request['point'][$i] != 'null') {
+                // echo $request['point'][$i];
+                $student->subjects[$i]->pivot->update([
+                    'point' => $request['point'][$i]
+                ]);
+            }
+        }
+        return redirect()->back();
     }
 
     public function impost_subjects($id)
@@ -297,9 +306,8 @@ class SubjectController extends Controller
                 for ($i = 0; $i < $subjects->count(); $i++) {
                     if (!$student->subjects[$i]->pivot->point) {
                         break;
-                    }
-                    elseif($i == $subjects->count() - 1){
-                        $student['avg'] = round($student->subjects->avg('pivot.point',2));
+                    } elseif ($i == $subjects->count() - 1) {
+                        $student['avg'] = round($student->subjects->avg('pivot.point', 2));
                         $listStudent[] = $student;
                     }
                 }

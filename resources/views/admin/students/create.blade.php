@@ -7,11 +7,12 @@
     {{ Form::text('name', '', array('class'=>'form-control')) }}
 
 </div>
-<div class="form-group">
+
+<!-- <div class="form-group">
     {{ Form::label('avatar', 'Avatar')}}
     {{ Form::file('avatar', array('class'=>'form-control')) }}
+</div> -->
 
-</div>
 <div class="form-group">
     {{ Form::label('email', 'Email') }}
     {{ Form::text('email', '', array('class' => 'form-control')) }}
@@ -31,8 +32,8 @@
 </div>
 <div class="form-group">
     {{ Form::label('gender', 'Gender')}}
-    Male: {{ Form::radio('gender', '0')}}
-    Female: {{ Form::radio('gender', '1')}}
+    Male: {{ Form::radio('gender', '1')}}
+    Female: {{ Form::radio('gender', '0')}}
 
 </div>
 <div>

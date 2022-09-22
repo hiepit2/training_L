@@ -45,7 +45,7 @@ Route::group(['middleware' => ['role:teacher']], function () {
     
     Route::get('/mail_subjects/{id}', [SubjectController::class, 'mail_subjects'])->name('mail_subjects');
     Route::get('/create_point/{id}', [SubjectController::class, 'create_point'])->name('create_point');
-    Route::put('/store_point', [SubjectController::class, 'store_point'])->name('store_point');
+    Route::put('/store_point/{id}', [SubjectController::class, 'store_point'])->name('store_point');
     Route::get('/mail_subjects_all', [SubjectController::class, 'mail_subjects_all'])->name('mail_subjects_all');
     Route::get('/mail_avg', [SubjectController::class, 'mail_avg'])->name('mail_avg');
     

@@ -127,7 +127,6 @@ class FacultyController extends Controller
         if ($student->faculty_id) {
             return redirect()->back()->with('error', 'You are registered for science.');
         } else {
-
             for ($i = 0; $i < $student->subjects->count(); $i++) {
                 if (!$student->subjects[$i]->pivot->point) {
                     return redirect()->back()->with('error', 'You do not have a grade point average, can not register.');

@@ -22,7 +22,7 @@ class StudentRepository extends BaseRepository implements StudentRepositoryInter
 
     public function search($data)
     {
-        $students = $this->model->newQuery()->with('subjects');
+        $students = $this->model->newQuery()->with('subjects')->orderby('updated_at','desc');
 
         if (isset($data['age_from'])) {
             $students->whereYear('birthday', '<=', Carbon::now()->subYear($data['age_from'])->format('Y'));
@@ -45,6 +45,10 @@ class StudentRepository extends BaseRepository implements StudentRepositoryInter
     public function show_student($id)
     {
         return $this->model->where('user_id', '=', $id)->first();
+    }
+
+    public function findStudent($id){
+        return $this->model->where('id', '=', $id)->with('subjects')->first();
     }
 
 }

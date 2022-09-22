@@ -49,7 +49,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $count = $this->subjectRepo->getSubject()->count();
-        $students = $this->studentRepo->search($request->all())->paginate(3);
+        $students = $this->studentRepo->search($request->all())->paginate(5);
         return view('admin.students.index', compact('students', 'count'));
     }
 
@@ -83,30 +83,14 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        // $errors = $request->validate([
-        //     'email' => ['required', 'unique:email'],
-        // ]);
-        dd($request);
-        $validator = Validator::make($request->all(), [
-            'email' => 'required',
-           
+        $errors = $request->validate([
+            'name' => ['required'],
+            'email' => ['required'],
+            'phone' => ['required'],
+            'address' => ['required'],
+            'birthday' => ['required'],
         ]);
-        dd($validator);
-        if ($request['name'] == '') {
-            $request['name'] = 'student';
-        }
-        if ($request['birthday'] == '') {
-            $request['birthday'] = date('yy/m/d');
-        }
-        if ($request['address'] == '') {
-            $request['address'] = '';
-        }
-        if ($request['phone'] == '') {
-            $request['phone'] = '';
-        }
-        if ($request['gender'] == '') {
-            $request['gender'] = '0';
-        }
+
 
         $data_user = [
             'name' => $request->name,
@@ -116,14 +100,14 @@ class StudentController extends Controller
         $user = $this->userRepo->create($data_user);
         $user_id = $user->id;
 
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->avatar;
-            $avatarName = $avatar->hashName();
-            $avatarName = $request->name . '_' . $avatarName;
-            $request->avatar = $avatar->storeAs('images/students', $avatarName);
-        } else {
-            $request->avatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSErd3GQcEwGOfzFCIS2BdXBdOHHPIFwTBdMg&usqp=CAU';
-        }
+        // if ($request->hasFile('avatar')) {
+        //     $avatar = $request->avatar;
+        //     $avatarName = $avatar->hashName();
+        //     $avatarName = $request->name . '_' . $avatarName;
+        //     $request->avatar = $avatar->storeAs('images/students', $avatarName);
+        // } else {
+        // }
+        $request->avatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSErd3GQcEwGOfzFCIS2BdXBdOHHPIFwTBdMg&usqp=CAU';
 
         $request['user_id'] = $user_id;
         $code = $user_id;
@@ -139,9 +123,10 @@ class StudentController extends Controller
         $student = $this->studentRepo->create($data);
         $user = $this->userRepo->find($user_id);
         $user->assignRole(2);
-        $mailable = new RegistMail($user);
-        Mail::to($request->email)->send($mailable);
-        return redirect()->route('students.index')->with('message', 'Successfully');
+        // $mailable = new RegistMail($user);
+        // Mail::to($request->email)->send($mailable);
+
+        return response()->json(['user' => $user, 'data' => $data, 'errors' => $errors]);
     }
 
 
