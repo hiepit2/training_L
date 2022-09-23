@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\SubjectsExport;
 use App\Http\Requests\SubjectRequest;
 use App\Imports\SubjectsImport;
+use App\Mail\AutoMail;
 use App\Mail\Mail_subject;
 use App\Mail\RegistMail;
 use App\Models\Student;
@@ -256,7 +257,6 @@ class SubjectController extends Controller
         $student = $this->studentRepo->findStudent($id);
         for ($i = 0; $i < $student->subjects->count(); $i++) {
             if ($request['point'][$i] != 'null') {
-                // echo $request['point'][$i];
                 $student->subjects[$i]->pivot->update([
                     'point' => $request['point'][$i]
                 ]);
@@ -301,18 +301,30 @@ class SubjectController extends Controller
     {
         $subjects = $this->subjectRepo->newModel()->get();
         $students = $this->studentRepo->newModel()->with('subjects')->get();
+        $listStudent = [];
         foreach ($students as $student) {
             if ($student->subjects->count() == $subjects->count()) {
                 for ($i = 0; $i < $subjects->count(); $i++) {
                     if (!$student->subjects[$i]->pivot->point) {
                         break;
                     } elseif ($i == $subjects->count() - 1) {
-                        $student['avg'] = round($student->subjects->avg('pivot.point', 2));
-                        $listStudent[] = $student;
+                        $avg = $student->subjects->avg('pivot.point', 2);
+                        if (!$student['status']) {
+                            if ($avg < 5) {
+                                $student['status'] = '1';
+                                $student->update([
+                                    'status' => $student['status']
+                                ]);
+                                $student['avg'] = $avg;
+                                $mailable = new AutoMail($student);
+                                Mail::to($student->email)->send($mailable);
+                            }
+                        }
                     }
                 }
             }
         }
-        dd($listStudent);
+
+      
     }
 }

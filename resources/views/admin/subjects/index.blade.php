@@ -129,9 +129,9 @@
         <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
             </div>
-                <div class="input-group">
-                    <button type="submit" class="btn btn-outline-success">Success</button>
-                </div>
+            <div class="input-group">
+                <button type="submit" class="btn btn-outline-success">Success</button>
+            </div>
         </div>
         @endcan
     </form>

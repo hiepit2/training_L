@@ -241,9 +241,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <!-- <div id="form_update_point">
-
-                                </div> -->
+                          
                                 <form method="post" id="form_update_point">
                                     @csrf
                                     @method('PUT')
@@ -259,16 +257,13 @@
                                         <tbody id="table-subject">
                                         </tbody>
                                     </table>
-                                    <button>Xác nhận</button>
-                                    <!-- <div id="end_form_update_point">
+                          
 
-                                </div> -->
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
                                 </form>
-
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
                             </div>
 
                         </div>
@@ -316,7 +311,7 @@
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
-<a href=""></a>
+
 <script>
     // gọi button khi click thì mở modal + get url lấy data student qua var id = $(this).attr('data-id');
     $(document).ready(function() {
@@ -346,7 +341,7 @@
                 <tr>
                 <td>${element.id}</td>
                 <td><a type="button" class="btn btn-primary" href="/create_point/${element.id}">${element.name}</a></td>
-                <td><input type="text" name = "point[]" value = "${element.pivot.point}"></td>                            
+                <td><input type="text" class="form-control" name = "point[]" value = "${element.pivot.point}"></td>                            
                 </tr>
                 `;
             });
