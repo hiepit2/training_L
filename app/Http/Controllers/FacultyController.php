@@ -11,6 +11,7 @@ use App\Repositories\Subjects\SubjectRepositoryInterface;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -42,6 +43,8 @@ class FacultyController extends Controller
      */
     public function index()
     {
+        $locale = App::currentLocale();
+        // dd($locale);
         $student = $this->studentRepo->show_student(Auth::user()->id);
         $faculties = $this->facultyRepo->getAll();
         return view('admin.faculties.index', compact('faculties', 'student'));
@@ -68,7 +71,7 @@ class FacultyController extends Controller
     {
         $data = $request->all();
         $faculty = $this->facultyRepo->create($data);
-        return redirect()->route('faculties.index')->with('message', 'Successfully');
+        return redirect()->route('faculties.index')->with('message', __('welcome.succesfully'));
     }
 
     /**
@@ -105,7 +108,7 @@ class FacultyController extends Controller
     {
         $data = $request->all();
         $this->facultyRepo->update($id, $data);
-        return redirect()->route('faculties.index')->with('message', 'Successfully');
+        return redirect()->route('faculties.index')->with('message', __('welcome.succesfully'));
     }
 
     /**
@@ -116,30 +119,33 @@ class FacultyController extends Controller
      */
     public function destroy($id)
     {
+        dd($id);
         $this->facultyRepo->delete($id);
-        return redirect()->route('faculties.index')->with('message', 'Successfully');
+        return redirect()->route('faculties.index')->with('message', __('welcome.succesfully'));
     }
 
     public function updateFaculty(Request $request)
     {
-        // dd($request);
         $student = $this->studentRepo->show_student(Auth::user()->id);
-        if ($student->faculty_id) {
-            return redirect()->back()->with('error', 'You are registered for science.');
-        } else {
-            for ($i = 0; $i < $student->subjects->count(); $i++) {
-                if (!$student->subjects[$i]->pivot->point) {
-                    return redirect()->back()->with('error', 'You do not have a grade point average, can not register.');
-                } elseif ($i == $student->subjects->count() - 1) {
-                    $avg = round($student->subjects->avg('pivot.point', 2));
-                    if ($avg < 5) {
-                        return redirect()->back()->with('error', 'Your GPA:' . $avg . ' You can not register');
-                    } else {
-                        $data = [
-                            'faculty_id' => $request->faculty_id,
-                        ];
-                        $this->studentRepo->update($student->id, $data);
-                        return redirect()->back()->with('message', 'Succesfully');
+        $subjects = $this->subjectRepo->getSubject();
+        if (!$student->faculty_id) {
+            if ($student->subjects->count() != $subjects->count()) {
+                return redirect()->back()->with('error', __('welcome.register-faculty-dont-subjects'));
+            } else {
+                for ($i = 0; $i < $student->subjects->count(); $i++) {
+                    if (!$student->subjects[$i]->pivot->point) {
+                        return redirect()->back()->with('error', __('welcome.register-faculty-dont-avg'));
+                    } elseif ($i == $student->subjects->count() - 1) {
+                        $avg = round($student->subjects->avg('pivot.point', 2));
+                        if ($avg < 5) {
+                            return redirect()->back()->with('error', __('welcome.register-faculty-avg') . ' ' . $avg .'. ' . __('welcome.register-faculty-not'));
+                        } else {
+                            $data = [
+                                'faculty_id' => $request->faculty_id,
+                            ];
+                            $this->studentRepo->update($student->id, $data);
+                            return redirect()->back()->with('message', __('welcome.succesfully'));
+                        }
                     }
                 }
             }

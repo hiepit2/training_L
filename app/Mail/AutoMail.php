@@ -10,15 +10,17 @@ use Illuminate\Queue\SerializesModels;
 class AutoMail extends Mailable
 {
     use Queueable, SerializesModels;
+    
+    private $avg;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($student)
+    public function __construct($avg)
     {
-        $this->student = $student;
+        $this->avg = $avg;
     }
 
     /**
@@ -31,7 +33,7 @@ class AutoMail extends Mailable
         return $this->view('mail.autoMail')
         ->subject('Thông báo thôi học')
         ->with([
-            'student' => $this->student,
+            'avg' => $this->avg,
         ]);
     }
 }

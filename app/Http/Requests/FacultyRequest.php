@@ -31,7 +31,6 @@ class FacultyRequest extends FormRequest
         ];
 
         if ($this->route('faculty')) {
-            // $data['name'] = 'required|unique:faculties,id,' . $this->route('faculty');
             $data['name'] = ['required', ValidationRule::unique('faculties')->ignore($this->route('faculty'))];
         }
         return $data;

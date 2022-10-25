@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Repositories\Faculties\FacultyRepositoryInterface;
 use App\Repositories\Students\StudentRepositoryInterface;
 use App\Repositories\Users\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -103,7 +105,7 @@ class UserController extends Controller
         $users = $this->userRepo->newModel();
         return view('users.login.login', compact('users'));
     }
-    public function check_login(Request $request)
+    public function checkLogin(Request $request)
     {
         $email = $request->email;
         $password = $request->password;
@@ -112,12 +114,6 @@ class UserController extends Controller
             'password' => $password
         ]))
             return view('admin.dashboard');
-        // {
-        // if (Auth::user()->roles[0]['name'] === 'teacher') {
-        // } else {
-        //     return redirect()->route('users.index');
-        // }
-        //} 
         else {
             return redirect()->route('users.login');
         };

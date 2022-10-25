@@ -29,7 +29,6 @@ class SubjectRequest extends FormRequest
         ];
 
         if ($this->route('subject')) {
-            // $data['name'] = 'required|min:6|max:32|unique:subjects,id,' . $this->route('subjects');  
             $data['name'] = ['required', Rule::unique('subjects')->ignore($this->route('subject'))];
         }
 

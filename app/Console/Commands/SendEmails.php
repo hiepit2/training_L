@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Mail\AutoMail;
+use App\Models\Student;
+use App\Models\Subject;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -13,7 +15,7 @@ class SendEmails extends Command
      *
      * @var string
      */
-    protected $signature = 'command:autoMail';
+    protected $signature = 'auto:autoMail';
 
     /**
      * The console command description.
@@ -29,8 +31,15 @@ class SendEmails extends Command
      */
     public function handle()
     {
-        $subjects = $this->subjectRepo->newModel()->get();
-        $students = $this->studentRepo->newModel()->with('subjects')->get();
+        // $avg = 'csdaas';
+        // $mailable = new AutoMail($avg);
+        // Mail::to('hiepntph15608@fpt.edu.vn')->queue($mailable);
+        // $subjects = $this->subjectRepo->newModel()->get();
+        // $students = $this->studentRepo->newModel()->with('subjects')->get();
+
+        $subjects = Subject::get();
+        $students = Student::with('subjects')->get();
+
         foreach ($students as $student) {
             if ($student->subjects->count() == $subjects->count()) {
                 for ($i = 0; $i < $subjects->count(); $i++) {
@@ -44,15 +53,15 @@ class SendEmails extends Command
                                 $student->update([
                                     'status' => $student['status']
                                 ]);
-                                $student['avg'] = $avg;
-                                $mailable = new AutoMail($student);
-                                Mail::to($student->email)->send($mailable);
+                           
+                                $mailable = new AutoMail($avg);
+                                Mail::to($student->email)->queue($mailable);
                             }
                         }
                     }
                 }
             }
         }
-
+        // return 0;
     }
 }

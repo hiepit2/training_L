@@ -1,17 +1,14 @@
 @extends('layout.master')
 @section('title','Add new student')
 @section('content')
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
 {{ Form::model($student, array('route'=>'students.store', 'method'=>'post', 'enctype'=>'multipart/form-data'))}}
 <div class="form-group">
     {{ Form::label('name', 'Name sutdent') }}
     {{ Form::text('name', '', array('class'=>'form-control')) }}
 
 </div>
-
-<!-- <div class="form-group">
-    {{ Form::label('avatar', 'Avatar')}}
-    {{ Form::file('avatar', array('class'=>'form-control')) }}
-</div> -->
 
 <div class="form-group">
     {{ Form::label('email', 'Email') }}

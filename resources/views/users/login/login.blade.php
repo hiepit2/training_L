@@ -23,10 +23,10 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <form action="{{route('check_login')}}" method="post">
+                <form action="{{route('check-login')}}" method="post">
                     @csrf
                     <div class="input-group mb-3">
-                        {{ Form::email('email', '', ['class' => 'form-control', 'placeholder' => 'Email'])}}
+                        {{ Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' => 'Email'])}}
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>

@@ -1,25 +1,26 @@
 @extends('layout.master')
-@section('title','Update point')
+@section('title',__('welcome.list-point'))
 @section('content')
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
 <div class="container">
     <div class="form-group">
-        <a href="{{route('impost_subjects', $id)}}">
-            <button type="button" class="btn btn-info">Import</button>
+        <a href="{{route('import-subjects', $id)}}">
+            <button type="button" class="btn btn-info">@lang('welcome.import')</button>
         </a>
     </div>
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Point</th>
-
+                <th scope="col">@lang('welcome.col-#')</th> 
+                <th scope="col">@lang('welcome.col-name')</th>
+                <th scope="col">@lang('welcome.col-point')</th>
             </tr>
         </thead>
         <tbody>
             @foreach($students as $student)
             <tr>
-                <!-- <td>{{$student->id}}</td> -->
+          
                 <td>{{$student->id}}</td>
                 <td>{{$student->name}}</td>
                 <td>

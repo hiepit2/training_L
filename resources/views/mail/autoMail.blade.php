@@ -1,2 +1,2 @@
-Do điểm trung bình của bạn là: {{$student->avg}}.
+Do điểm trung bình của bạn là: {{$avg}}.
 Bạn phải buộc thôi học!

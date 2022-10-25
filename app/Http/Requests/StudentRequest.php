@@ -30,7 +30,6 @@ class StudentRequest extends FormRequest
         ];
 
         if ($this->route('student')) {
-            // $data['email'] = 'required|min:6|max:32|unique:students,id,' . $this->route('students');  
             $data['email'] = ['required', ValidationRule::unique('students')->ignore($this->route('student'))];
         }
 

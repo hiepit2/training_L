@@ -15,6 +15,7 @@ use App\Repositories\Subjects\SubjectRepositoryInterface;
 use App\Repositories\Users\UserRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -72,25 +73,15 @@ class StudentController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    // public function storeStudent(Request $request)
-    // {
-    //     $student = $this->studentRepo->newModel();
-    //     dd($student);
-    //     return response()->json([
-    //         'student' => $student,
-    //     ], 200);
-    // }
-
     public function store(Request $request)
     {
         $errors = $request->validate([
             'name' => ['required'],
-            'email' => ['required'],
+            'email' => ['required', 'unique:users', 'email'],
             'phone' => ['required'],
             'address' => ['required'],
             'birthday' => ['required'],
         ]);
-
 
         $data_user = [
             'name' => $request->name,
@@ -100,15 +91,7 @@ class StudentController extends Controller
         $user = $this->userRepo->create($data_user);
         $user_id = $user->id;
 
-        // if ($request->hasFile('avatar')) {
-        //     $avatar = $request->avatar;
-        //     $avatarName = $avatar->hashName();
-        //     $avatarName = $request->name . '_' . $avatarName;
-        //     $request->avatar = $avatar->storeAs('images/students', $avatarName);
-        // } else {
-        // }
         $request->avatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSErd3GQcEwGOfzFCIS2BdXBdOHHPIFwTBdMg&usqp=CAU';
-
         $request['user_id'] = $user_id;
         $code = $user_id;
         for ($i = 0; strlen($code) < 6; $i++) {
@@ -123,8 +106,8 @@ class StudentController extends Controller
         $student = $this->studentRepo->create($data);
         $user = $this->userRepo->find($user_id);
         $user->assignRole(2);
-        // $mailable = new RegistMail($user);
-        // Mail::to($request->email)->send($mailable);
+        $mailable = new RegistMail($user);
+        Mail::to($request->email)->queue($mailable);
 
         return response()->json(['user' => $user, 'data' => $data, 'errors' => $errors]);
     }
@@ -140,6 +123,7 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = $this->studentRepo->show_student(Auth::user()->id);
+        
         return view('admin.students.show', compact('student'));
     }
 
@@ -184,7 +168,7 @@ class StudentController extends Controller
             $data['avatar'] = $request->avatar;
         }
         $student = $this->studentRepo->update($id, $data);
-        return redirect()->route('students.index')->with('message', 'Successfully');
+        return redirect()->route('students.index')->with('message', __('welcome.succesfully'));
     }
 
     /**
@@ -195,13 +179,14 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
+        dd($id);
         $student = $this->studentRepo->find($id);
         $user = $this->userRepo->find($student->user_id)->delete();
         $this->studentRepo->delete($student->id);
-        return redirect()->route('students.index')->with('message', 'Successfully');
+        return redirect()->route('students.index')->with('message', __('welcome.succesfully'));
     }
 
-    public function update_profile(Request $request, $id)
+    public function updateProfile(Request $request, $id)
     {
         if ($request->hasFile('avatar')) {
             $avatar = $request->avatar;
@@ -211,27 +196,10 @@ class StudentController extends Controller
             $data['avatar'] = $request->avatar;
         }
         $student = $this->studentRepo->update($id, $data);
-        return redirect()->back()->with('message', 'Successfully');
+        return redirect()->back()->with('message', __('welcome.succesfully'));
     }
 
-    public function impost_students($id)
-    {
-        return view('admin.students.import', compact('id'));
-    }
-
-    public function upload_students(Request $request)
-    {
-        Excel::import(new StudentsImport, $request->file);
-        return redirect()->route('students.index')->with('message', 'Student Imported Successfully');
-    }
-
-    public function export_students($id)
-    {
-        return Excel::download(new StudentsExport($id), 'students.xlsx');
-    }
-
-    public function get_student($id){
+    public function getStudent($id){
         return Student::with('subjects')->find($id);
-        // return $this->studentRepo->find($id);
     }
 }

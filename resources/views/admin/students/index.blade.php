@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title','Student List')
+@section('title',__('welcome.list-student'))
 @section('content')
 
 <div class="row">
@@ -9,25 +9,24 @@
                 <h3 class="card-title">
                     <!-- add student -->
                     <div class="add">
-                        <a href="{{route('students.create')}}" class="btn btn-success">+</a>
 
                         <!-- add student quick -->
-                        <button type="button" class="btn btn-success addQuick" data-toggle="modal" data-target=".bd-example-modal-lg">Quick Add</button>
+                        <button type="button" class="btn btn-success addQuick" data-toggle="modal" data-target=".bd-example-modal-lg">@lang('welcome.act-add-quick')</button>
 
                         <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="saveAdd">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">@lang('welcome.act-create')</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         {{ Form::model($students, ['route' => 'students.store', 'method' => 'post', 'enctype' => 'multipart/form-data']) }}
-                                        <label> Name Student</label>
+                                        <label>@lang('welcome.col-name')</label>
                                         {!! Form::text('name', old('name'), ['class' => 'form-control',
-                                        'placeholder' => 'Enter Name',
+                                        'placeholder' => __('welcome.col-name'),
                                         'id' => 'name']) !!}
                                         <div class="text-danger">
                                             <span class="error_name"></span>
@@ -36,10 +35,10 @@
                                         <br />
 
 
-                                        <label> Email Student</label>
-                                        {!! Form::text('email', old('email'), [
+                                        <label>@lang('welcome.col-email')</label>
+                                        {!! Form::email('email', old('email'), [
                                         'class' => 'form-control',
-                                        'placeholder' => 'Enter Email',
+                                        'placeholder' => __('welcome.col-email'),
                                         'id' => 'email',
                                         ]) !!}
                                         <div class="text-danger">
@@ -49,10 +48,10 @@
                                         <br />
 
 
-                                        <label> Phone Student</label>
+                                        <label>@lang('welcome.col-phone')</label>
                                         {!! Form::text('phone', old('phone'), [
                                         'class' => 'form-control',
-                                        'placeholder' => 'Enter Phone',
+                                        'placeholder' => __('welcome.col-phone'),
                                         'id' => 'phone',
                                         ]) !!}
                                         <div class="text-danger">
@@ -61,10 +60,10 @@
 
                                         <br />
 
-                                        <label> Address Student</label>
+                                        <label>@lang('welcome.col-address')</label>
                                         {!! Form::text('address', old('address'), [
                                         'class' => 'form-control',
-                                        'placeholder' => 'Enter Address',
+                                        'placeholder' => __('welcome.col-address'),
                                         'id' => 'address',
                                         ]) !!}
                                         <div class="text-danger">
@@ -74,32 +73,33 @@
                                         <br />
 
 
-                                        <label> BirthDay Student</label>
+                                        <label>@lang('welcome.col-birthday')</label>
                                         {!! Form::date('birthday', old('birthday'), ['class' => 'form-control', 'id' => 'birthday']) !!}
                                         <div class="text-danger">
                                             <span class="error_birthday"></span>
                                         </div>
 
                                         <br />
-                                        <label> Gender Student</label>
+                                        <label> @lang('welcome.col-gender')</label>
                                         <div class="form-group">
                                             <div class="form-check">
                                                 {!! Form::radio('gender', '1', true, ['id' => 'gender']) !!}
                                                 <label class="form-check-label" for="exampleRadios1">
-                                                    Nam
+                                                    @lang('welcome.row-male')
                                                 </label>
                                             </div>
                                             <div class="form-check">
                                                 {!! Form::radio('gender', '0', true, ['id' => 'gender']) !!}
                                                 <label class="form-check-label" for="exampleRadios2">
-                                                    Nữ
+                                                    @lang('welcome.row-female')
+
                                                 </label>
                                             </div>
                                         </div>
                                         <br />
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" id="saveAdd" class="btn btn-primary saveAdd">Save changes</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('welcome.act-close')</button>
+                                            <button type="button" id="saveAdd" class="btn btn-primary saveAdd">@lang('welcome.act-submit')</button>
                                         </div>
 
                                         {!! Form::close() !!}
@@ -120,11 +120,11 @@
                                 <div class="row">
                                     <div class="container-fluid1">
                                         <div class="col-sm-3">
-                                            <label for="">Age from</label>
+                                            <label for="">@lang('welcome.col-age-from')</label>
                                             <input type="text" class="form-control input-sm" id="fromOld" name="age_from" require>
                                         </div>
                                         <div class="col-sm-3">
-                                            <label for="">Age to</label>
+                                            <label for="">@lang('welcome.col-age-to')</label>
                                             <input type="text" class="form-control input-sm" id="toOld" name="age_to" require>
                                         </div>
                                     </div>
@@ -135,15 +135,15 @@
                                 <div class="row">
                                     <div class="container-fluid1">
                                         <div class="col-sm-3">
-                                            <label for="">Point from</label>
+                                            <label for="">@lang('welcome.col-point-from')</label>
                                             <input type="text" class="form-control input-sm" id="fromPoint" name="point_from" require>
                                         </div>
                                         <div class="col-sm-3">
-                                            <label for="">Point to</label>
+                                            <label for="">@lang('welcome.col-point-to')</label>
                                             <input type="text" class="form-control input-sm" id="toPoint" name="point_to" require>
                                         </div>
                                         <div class="col-sm-2">
-                                            <button type="submit" class="btn" name="search">Search</button>
+                                            <button type="submit" class="btn" name="search">@lang('welcome.act-submit')</button>
                                         </div>
                                     </div>
                                 </div>
@@ -159,13 +159,12 @@
                 <table class="table table-head-fixed text-nowrap">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Avatar</th>
-                            <th>Full name</th>
-                            <th>Point</th>
-                            <th>Subjects</th>
-                            <th>Action</th>
-                            <th>Detail</th>
+                            <th>@lang('welcome.col-#')</th>
+                            <th>@lang('welcome.col-avatar')</th>
+                            <th>@lang('welcome.col-name')</th>
+                            <th>@lang('welcome.col-point')</th>
+                            <th>@lang('welcome.subject')</th>
+                            <th>@lang('welcome.col-act')</th>
                         </tr>
                     </thead>
 
@@ -184,12 +183,12 @@
                                     ...
                                 </div>
                                 @elseif($student->subjects->count() < $count) <div>
-                                    Studing
+                                    @lang('welcome.row-studying')
             </div>
             @else
             @for($i=0; $i < $count; $i++) @if(!$student->subjects[$i]->pivot->point)
                 <div>
-                    Studing
+                    @lang('welcome.row-studying')
                 </div>
                 @break
                 @elseif($i == $count -1)
@@ -204,7 +203,8 @@
         </td>
         <td>{{$student->subjects->count()}} / {{$count}}</td>
         <td>
-            <div>
+            <div class="btn-action">
+                <!-- update student -->
                 <a href="{{route('students.edit',$student->id)}}">
                     <button class="btn btn-warning">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -213,80 +213,83 @@
                         </svg>
                     </button>
                 </a>
-            </div>
-            <div>
+
+                <!-- delete student -->
                 {{ Form::model($students, array('route' => array('students.destroy',$student->id), 'method' => 'DELETE'))}}
-                {{ Form::submit('Delete', ['class' => 'btn btn-danger', 'onclick' => "return confirm('Are you sure you want to delete?')"])}}
-                {{ Form::close() }}
-            </div>
-        </td>
-        <td>
+                <div>
+                    <button type="submit" onclick="return confirm(`@lang('welcome.confirm')`)" class="btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                        </svg>
+                    </button>
+                </div>
+                {{ Form::close()}}
+                <!-- Modal show subjects of student -->
+                <div>
+                    <button class="btn btn-primary btnModal" id="modalPoint" data-toggle="modal" data-target="#exampleModal" data-id="{{$student->id}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                        </svg>
+                    </button>
 
-            <!-- Modal show subjects of student -->
-            <div>
-                <button class="btn btn-primary btnModal" id="modalPoint" data-toggle="modal" data-target="#exampleModal" data-id="{{$student->id}}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
-                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-                    </svg>
-                </button>
+                    <div class="modal fade" data-id="{{$student->id}}" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">@lang('welcome.list-subject-point')</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
 
-                <div class="modal fade" data-id="{{$student->id}}" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                    <form method="post" id="form_update_point">
+                                        @csrf
+                                        @method('PUT')
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">@lang('welcome.col-#')</th>
+                                                    <th scope="col">@lang('welcome.col-name')</th>
+                                                    <th scope="col">@lang('welcome.col-point')</th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table-subject">
+                                            </tbody>
+                                        </table>
+
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('welcome.act-close')</button>
+                                            <button type="submit" class="btn btn-primary">@lang('welcome.act-submit')</button>
+                                        </div>
+                                    </form>
+                                </div>
+
                             </div>
-                            <div class="modal-body">
-                          
-                                <form method="post" id="form_update_point">
-                                    @csrf
-                                    @method('PUT')
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Point</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody id="table-subject">
-                                        </tbody>
-                                    </table>
-                          
-
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Save</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
-                                </form>
-                            </div>
-
                         </div>
                     </div>
                 </div>
+                <!-- End Modal show subjects of student -->
+
+
+                @if($student->subjects->count() < $count) {{ Form::model($student, ['route' => ['mail-subjects', $student], 'method' => 'get'])}} <button class="btn btn-secondary" type="submit" onclick="return confirm(`@lang('welcome.send-mail')`)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
+                    </svg>
+                    </button>
+                    {{ Form::close()}}
+                    @endif
             </div>
-            <!-- End Modal show subjects of student -->
-
-
-            @if($student->subjects->count() < $count) {{ Form::model($student, ['route' => ['mail_subjects', $student], 'method' => 'get'])}} <button class="btn btn-secondary" type="submit" onclick="return confirm('Do you want send to student?')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
-                </svg>
-                </button>
-                {{ Form::close()}}
-                @endif
-
         </td>
         </tr>
         @endforeach
-
         </tbody>
         </table>
+
     </div>
     <!-- /.card-body -->
 </div>
@@ -296,16 +299,14 @@
 </div>
 
 <!-- send mail all -->
-{{ Form::model($student, ['route' => ['mail_subjects_all'], 'method' => 'get'])}}
-<button type="submit" onclick="return confirm('Do you want send to student?')">
+{{ Form::model($student, ['route' => ['mail-subjects-all'], 'method' => 'get'])}}
+<button class="btn btn-secondary" type="submit" onclick="return confirm(`@lang('welcome.send-mail')`)">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
     </svg>
 </button>
 {{ Form::close()}}
 <!-- end send mail all -->
-
-
 
 {{ $students->links() }}
 
@@ -328,19 +329,20 @@
         e.preventDefault();
         $('tbody').addClass('name');
         var id = $(this).attr('data-id');
-        var href = '/store_point/' + id;
+        var href = '/subjects/store-point/' + id;
+        // dd(href);
         $('#form_update_point').attr('action', href);
         console.log(id);
-        var url = '/get_student/' + id;
+        var url = '/subjects/get-student/' + id;
 
-        $.get('/get_student/' + id, function(data) {
+        $.get('students/get-student/' + id, function(data) {
             var tr = '';
 
             data.subjects.forEach(element => {
                 tr += `
                 <tr>
                 <td>${element.id}</td>
-                <td><a type="button" class="btn btn-primary" href="/create_point/${element.id}">${element.name}</a></td>
+                <td><a type="button" class="btn btn-primary" href="subjects/create-point/${element.id}">${element.name}</a></td>
                 <td><input type="text" class="form-control" name = "point[]" value = "${element.pivot.point}"></td>                            
                 </tr>
                 `;
@@ -350,7 +352,6 @@
 
         });
     })
-
 
     //quick add
     $('.saveAdd').on('click', function(e) {
@@ -428,6 +429,11 @@
 
 <style>
     .container-fluid1 {
+        display: flex;
+    }
+
+    .btn-action {
+        column-gap: 5px;
         display: flex;
     }
 </style>

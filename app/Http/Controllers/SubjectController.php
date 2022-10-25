@@ -16,6 +16,7 @@ use App\Repositories\Students\StudentRepositoryInterface;
 use App\Repositories\Subjects\SubjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
@@ -40,6 +41,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
+        $locale = App::currentLocale();
         $subjects = $this->subjectRepo->withStudent()->get();
         if (Auth::user()->roles[0]->name == 'teacher') {
             $subjects = $this->subjectRepo->withStudent()->paginate(3);
@@ -91,7 +93,7 @@ class SubjectController extends Controller
     {
         $data = $request->all();
         $subject = $this->subjectRepo->create($data);
-        return redirect()->route('subjects.index')->with('message', 'Successfully');
+        return redirect()->route('subjects.index')->with('message', __('welcome.succesfully'));
     }
 
     /**
@@ -102,24 +104,7 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
-        $subjects = $this->subjectRepo->withStudent();
-        $student = $this->studentRepo->find($id);
-        $subject_po = $student->subjects;
-        $sum = 0;
-        $average = 0;
-        if ($subject_po->count() == $subjects->count()) {
-            foreach ($subject_po as $item) {
-                if ($item->pivot->point) {
-                    $sum += $item->pivot->point;
-                } else {
-                    $sum = 0;
-                    break;
-                }
-            }
-            $average = round($sum / $subject_po->count(), 2);
-        }
-        $subject_point = $student->subjects()->paginate(3);
-        return view('admin.subjects.show', compact('subject_point', 'student', 'average'));
+
     }
 
     /**
@@ -145,7 +130,7 @@ class SubjectController extends Controller
     {
         $data = $request->all();
         $subject = $this->subjectRepo->update($id, $data);
-        return redirect()->route('subjects.index')->with('message', 'Successfully');
+        return redirect()->route('subjects.index')->with('message', __('welcome.succesfully'));
     }
 
     /**
@@ -156,17 +141,18 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
+        dd($id);
         $subjects = $this->subjectRepo->withStudent()->find($id);
 
         if (isset($subjects->students[0])) {
             return redirect()->route('subjects.index')->with('error', 'Unsuccessfully');
         } else {
             $this->subjectRepo->delete($id);
-            return redirect()->route('subjects.index')->with('message', 'Successfully');
+            return redirect()->route('subjects.index')->with('message', __('welcome.succesfully'));
         }
     }
 
-    public function sub_subject(Request $request)
+    public function subSubject(Request $request)
     {
         $students = $this->studentRepo->newModel();
         $studentId = Student::where('user_id', '=', Auth::user()->id)->first()->id;
@@ -175,7 +161,7 @@ class SubjectController extends Controller
     }
 
     //send mail subjects to person
-    public function mail_subjects($id)
+    public function mailSubjects($id)
     {
         $subs = Subject::all();
         $subjects = $this->subjectRepo->withStudent();
@@ -197,12 +183,12 @@ class SubjectController extends Controller
         }
 
         $mailable = new Mail_subject($listSubject);
-        Mail::to($student->email)->send($mailable);
-        return redirect()->route('students.index')->with('message', 'Successfully');
+        Mail::to($student->email)->queue($mailable);
+        return redirect()->route('students.index')->with('message', __('welcome.succesfully'));
     }
 
     //send mail subjects to people
-    public function mail_subjects_all()
+    public function mailSubjectAll()
     {
         $subs = Subject::all();
         $subjects = $this->subjectRepo->withStudent();
@@ -231,16 +217,15 @@ class SubjectController extends Controller
                 }
             }
             $mailable = new Mail_subject($listSubject);
-            Mail::to($student->email)->send($mailable);
+            Mail::to($student->email)->queue($mailable);
         }
-        return redirect()->route('students.index')->with('message', 'Successfully');
+        return redirect()->route('students.index')->with('message', __('welcome.succesfully'));
     }
 
     //create point
-    public function create_point($id)
+    public function createPoint($id)
     {
         $student_all = Student::with('subjects')->get();
-        // $count = $student_all->count();
         foreach ($student_all as $student) {
             foreach ($student->subjects as $item) {
                 if ($item->pivot->subject_id == $id) {
@@ -248,11 +233,11 @@ class SubjectController extends Controller
                 }
             }
         }
-        return view('admin.subjects.create_point', compact('students', 'id'));
+        return view('admin.subjects.createPoint', compact('students', 'id'));
     }
 
     //store_point
-    public function store_point(Request $request, $id)
+    public function storePoint(Request $request, $id)
     {
         $student = $this->studentRepo->findStudent($id);
         for ($i = 0; $i < $student->subjects->count(); $i++) {
@@ -265,43 +250,40 @@ class SubjectController extends Controller
         return redirect()->back();
     }
 
-    public function impost_subjects($id)
+    public function importSubjects($id)
     {
-        $subject = $id;
+        // $subject = $id;
         return view('admin.subjects.import', compact('id'));
     }
 
-    public function upload_subjects(Request $request, $id)
+    public function uploadSubjects(Request $request, $id)
     {
         $subject = $this->subjectRepo->withStudent()->find($id);
         $imports = Excel::toCollection(new SubjectsImport($id), request()->file('import_file'));
         foreach ($imports[0] as $import) {
             foreach ($subject->students as $student) {
-                // dd($student->pivot->subject_id);
                 if ($import['id'] == $student['id']) {
                     $student->pivot->where('subject_id', '=', $id)
                         ->where('student_id', '=', $student['id'])
                         ->update([
                             'point' => $import['point'],
                         ]);
-                    // break;
                 }
             }
         }
-        // $subjects = Excel::import(new SubjectsImport($id), $file);
-        return redirect()->route('subjects.index')->with('message', 'Subject Imported Successfully');
+        return redirect()->route('subjects.index')->with('message', __('welcome.succesfully'));
     }
 
-    public function export_subjects($id)
+    public function exportSubjects($id)
     {
         return Excel::download(new SubjectsExport($id), 'subjects.xlsx');
     }
 
-    public function mail_avg()
+    public function mailSvg()
     {
         $subjects = $this->subjectRepo->newModel()->get();
         $students = $this->studentRepo->newModel()->with('subjects')->get();
-        $listStudent = [];
+
         foreach ($students as $student) {
             if ($student->subjects->count() == $subjects->count()) {
                 for ($i = 0; $i < $subjects->count(); $i++) {
@@ -315,16 +297,14 @@ class SubjectController extends Controller
                                 $student->update([
                                     'status' => $student['status']
                                 ]);
-                                $student['avg'] = $avg;
-                                $mailable = new AutoMail($student);
-                                Mail::to($student->email)->send($mailable);
+
+                                $mailable = new AutoMail($avg);
+                                Mail::to($student->email)->queue($mailable);
                             }
                         }
                     }
                 }
             }
         }
-
-      
     }
 }

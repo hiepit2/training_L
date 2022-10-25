@@ -13,9 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <!-- overlayScrollbars -->
-    <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
 
@@ -30,23 +27,28 @@
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
-                <!-- <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="" class="nav-link">Contact</a>
-                </li> -->
             </ul>
-
             <!-- Right navbar links -->
-
             <ul class="navbar-nav ml-auto">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <!-- <input type="checkbox" checked data-toggle="toggle" data-on="EN" data-off="VI" data-onstyle="warning" data-offstyle="info"> -->
+                        <!-- change language -->
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @lang('welcome.title')
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a style="font-size: 15px" class="dropdown-item" href="{{ url('language/en') }}">
+                                        @lang('welcome.english_language')
+                                    </a>
+                                    <a style="font-size: 15px" class="dropdown-item" href="{{ url('language/vn') }}">
+                                        @lang('welcome.vietnam_language')
+                                    </a>
+                                </div>
+                            </div>
                         <ul class="navbar-nav">
+                        
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -55,25 +57,16 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     @foreach(Auth::user()->roles as $item)
                                     @if($item->name != 'teacher')
-                                    <a class="dropdown-item" href="{{route('students.show',Auth::user()->id)}}">Profile</a>
+                                    <a class="dropdown-item" href="{{route('students.show',Auth::user()->id)}}">@lang('welcome.profile')</a>
                                     @endif
                                     @endforeach
-                                    <a class="dropdown-item" href="{{route('users.logout')}}">Logout</a>
+                                    <a class="dropdown-item" href="{{route('users.logout')}}">@lang('welcome.act-logout')</a>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </nav>
-                <!-- <div class="dropdown">
-                    <a href="{{route('users.logout')}}" class="btn btn-secondary" type="button">
-                        Hồ sơ cá nhân
-                    </a>
-                </div>
-                <div class="dropdown">
-                    <a href="" class="btn btn-secondary" type="button">
-                        Logout
-                    </a>
-                </div> -->
+
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -121,7 +114,7 @@
                             <a href="{{route('faculties.index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Faculty
+                                @lang('welcome.faculty')
                                 </p>
                             </a>
 
@@ -131,7 +124,7 @@
                             <a href="{{route('students.index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Student
+                                @lang('welcome.student')
                                 </p>
                             </a>
                         </li>
@@ -140,7 +133,7 @@
                             <a href="{{route('subjects.index')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Subject
+                                @lang('welcome.subject')
                                 </p>
                             </a>
                         </li>
@@ -162,13 +155,6 @@
                         <div class="col-sm-6">
                             <h1>@yield('title')</h1>
                         </div>
-                        <!-- <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item"><a href="#">Layout</a></li>
-                                <li class="breadcrumb-item active">Fixed Layout</li>
-                            </ol>
-                        </div> -->
                     </div>
                 </div><!-- /.container-fluid -->
             </section>
@@ -189,25 +175,25 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-
-
-
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
 
- 
+
     <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@2.8.2/dist/alpine.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- link bootstrap -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- change language -->
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 </body>
 
 </html>
